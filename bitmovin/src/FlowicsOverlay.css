@@ -1,0 +1,8 @@
+.bmpui-ui-controlbar {
+  z-index: 20;
+  padding: 0;
+}
+
+.flowics-overlay.flowics-hidden .flowicsgraphicsFrame {
+  display: none;
+}

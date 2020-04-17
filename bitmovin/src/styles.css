@@ -1,0 +1,17 @@
+/* Uncomment to avoid control autohide */
+
+/*
+.bmpui-controls-hidden {
+  all: unset !important;
+}
+
+.bmpui-ui-controlbar.bmpui-hidden {
+  visibility: unset !important;
+  opacity: unset !important;
+}
+
+.bmpui-ui-titlebar.bmpui-hidden {
+  visibility: unset !important;
+  opacity: unset !important;
+}
+*/
