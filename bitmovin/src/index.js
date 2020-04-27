@@ -11,6 +11,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
       playsInline: true,
       autoplay: true,
     },
+    ui: false,
   };
   var uiConfig = {
     flowics: {
