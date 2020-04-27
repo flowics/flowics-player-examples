@@ -23,6 +23,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
     hls:
       "https://bitdash-a.akamaihd.net/content/MI201109210084_1/m3u8s/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.m3u8",
     // "https://cdn3.wowza.com/1/bGxnZ2dzbjk3TEJr/SVd1TlZu/hls/live/playlist.m3u8",
+    dash: "http://demo-dash-live.zahs.tv/hd/manifest.mpd?timeshift=100",
 
     poster:
       "https://bitdash-a.akamaihd.net/content/MI201109210084_1/poster.jpg",
