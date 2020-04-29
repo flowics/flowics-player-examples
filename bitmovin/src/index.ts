@@ -2,7 +2,8 @@ import { Player } from "bitmovin-player";
 
 import "bitmovin-player/bitmovinplayer-ui.css";
 import "./styles.css";
-import { buildUI } from "./VideoUI";
+import { buildUI, buildFlowicsUI } from "./VideoUI";
+import { UIFactory } from "bitmovin-player-ui";
 
 document.addEventListener("DOMContentLoaded", function (event) {
   var config = {
@@ -32,7 +33,8 @@ document.addEventListener("DOMContentLoaded", function (event) {
   var container = document.getElementById("bitmovin-player");
   if (container) {
     const player = new Player(container, config);
-    const uiInstance = buildUI(player, uiConfig);
+    const uiInstance = buildFlowicsUI(player, uiConfig);
+    // const uiInstance = UIFactory.buildDefaultUI(player, {});
 
     player.load(source).then(
       function () {

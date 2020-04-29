@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import { Container, UIManager, UIInstanceManager } from "bitmovin-player-ui";
-import { PlayerEvent, PlayerAPI } from "bitmovin-player";
+import { PlayerEvent, PlayerAPI, PlayerEventBase } from "bitmovin-player";
 import "./FlowicsOverlay.css";
 import { DOM } from "bitmovin-player-ui/dist/js/framework/dom";
 import { ContainerConfig } from "bitmovin-player-ui/dist/js/framework/components/container";
@@ -47,23 +47,23 @@ export class FlowicsOverlay extends Container<ContainerConfig> {
 
     // TODO handle on video end properly.
 
-    player.on(PlayerEvent.Playing, (/*event: PlayerEventBase*/) => {
+    player.on(PlayerEvent.Playing, (event: PlayerEventBase) => {
       this.showOverlayIfNeeded(player);
     });
 
-    player.on(PlayerEvent.Paused, (/*event: PlayerEventBase*/) => {
+    player.on(PlayerEvent.Paused, (event: PlayerEventBase) => {
       this.hide();
     });
 
-    player.on(PlayerEvent.StallStarted, (/*event: PlayerEventBase*/) => {
+    player.on(PlayerEvent.StallStarted, (event: PlayerEventBase) => {
       this.hide();
     });
 
-    player.on(PlayerEvent.StallEnded, (/*event: PlayerEventBase*/) => {
+    player.on(PlayerEvent.StallEnded, (event: PlayerEventBase) => {
       this.showOverlayIfNeeded(player);
     });
 
-    player.on(PlayerEvent.PlaybackFinished, (/*event: PlayerEventBase*/) => {
+    player.on(PlayerEvent.PlaybackFinished, (event: PlayerEventBase) => {
       this.hide();
     });
 
@@ -74,7 +74,7 @@ export class FlowicsOverlay extends Container<ContainerConfig> {
 
   showOverlayIfNeeded(player: PlayerAPI) {
     if (player.isLive()) {
-      if (player.getTimeShift() == 0) {
+      if (player.getTimeShift() === 0) {
         this.showOverlay();
       } else {
         this.hide();
