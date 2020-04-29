@@ -30,15 +30,17 @@ document.addEventListener("DOMContentLoaded", function (event) {
   };
 
   var container = document.getElementById("bitmovin-player");
-  const player = new Player(container, config);
-  const uiInstance = buildUI(player, uiConfig);
+  if (container) {
+    const player = new Player(container, config);
+    const uiInstance = buildUI(player, uiConfig);
 
-  player.load(source).then(
-    function () {
-      console.log("Successfully created Bitmovin Player instance");
-    },
-    function (reason) {
-      console.log("Error while creating Bitmovin Player instance");
-    }
-  );
+    player.load(source).then(
+      function () {
+        console.log("Successfully created Bitmovin Player instance");
+      },
+      function (reason) {
+        console.log("Error while creating Bitmovin Player instance");
+      }
+    );
+  }
 });

@@ -60,7 +60,7 @@ function ui() {
   return uiCont;
 }
 
-export function buildUI(videoPlayerInstance, uiConfig = {}) {
+export function buildUI(videoPlayerInstance: PlayerAPI, uiConfig = {}) {
   return new UIManager(
     videoPlayerInstance,
     [

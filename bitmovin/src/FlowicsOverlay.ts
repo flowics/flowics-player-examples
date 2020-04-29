@@ -1,10 +1,20 @@
 /* eslint-disable no-console */
-import { Container } from "bitmovin-player-ui";
-import { PlayerEvent } from "bitmovin-player";
+import { Container, UIManager, UIInstanceManager } from "bitmovin-player-ui";
+import { PlayerEvent, PlayerAPI } from "bitmovin-player";
 import "./FlowicsOverlay.css";
 import { DOM } from "bitmovin-player-ui/dist/js/framework/dom";
+import { ContainerConfig } from "bitmovin-player-ui/dist/js/framework/components/container";
 
-export class FlowicsOverlay extends Container {
+type FlowicsConfig = {
+  graphicsURL: string | null;
+};
+
+export class FlowicsOverlay extends Container<ContainerConfig> {
+  private flowicsConfig: FlowicsConfig = {
+    graphicsURL: null,
+  };
+
+  private iFrameInitialized: boolean = false;
   constructor(config = {}) {
     super(config);
 
@@ -25,8 +35,9 @@ export class FlowicsOverlay extends Container {
     );
   }
 
-  configure(player, uiManager) {
-    const uiConfig = uiManager.getConfig();
+  configure(player: PlayerAPI, uiManager: UIInstanceManager) {
+    // TODO See how to pass this correctly
+    const uiConfig: any = uiManager.getConfig();
 
     if (!uiConfig.flowics) {
       console.error('UIConfig does not have property "flowics".');
@@ -61,7 +72,7 @@ export class FlowicsOverlay extends Container {
     });
   }
 
-  showOverlayIfNeeded(player) {
+  showOverlayIfNeeded(player: PlayerAPI) {
     if (player.isLive()) {
       if (player.getTimeShift() == 0) {
         this.showOverlay();
@@ -91,7 +102,7 @@ export class FlowicsOverlay extends Container {
   buildIframe() {
     return new DOM("iframe", {
       class: `${this.config.cssPrefix}graphicsFrame`,
-      src: this.flowicsConfig.graphicsURL.replace(/&amp;/gi, "&"),
+      src: this.flowicsConfig.graphicsURL!.replace(/&amp;/gi, "&"),
     }).css({
       width: "100%",
       height: "100%",
