@@ -67,6 +67,10 @@ export class FlowicsOverlay extends Container<ContainerConfig> {
       this.hide();
     });
 
+    player.on(PlayerEvent.TimeShift, (event: PlayerEventBase) => {
+      this.hide();
+    });
+
     player.on(PlayerEvent.TimeShifted, () => {
       this.showOverlayIfNeeded(player);
     });

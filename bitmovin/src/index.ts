@@ -1,23 +1,25 @@
-import { Player } from "bitmovin-player";
+import { Player, PlayerConfig } from "bitmovin-player";
 
 import "bitmovin-player/bitmovinplayer-ui.css";
 import "./styles.css";
-import { buildUI, buildFlowicsUI } from "./VideoUI";
+import { buildFlowicsUI } from "./VideoUI";
 import { UIFactory } from "bitmovin-player-ui";
 
 document.addEventListener("DOMContentLoaded", function (event) {
-  var config = {
+  var config: PlayerConfig = {
     key: "REPLACE-WITH-YOUR-KEY",
     playback: {
       playsInline: true,
       autoplay: true,
+      muted: true,
     },
     ui: false,
   };
   var uiConfig = {
     flowics: {
       graphicsURL:
-        "https://viz.flowics.com/public/88e76302345390959725139ec6122a74/5d97e2b51965641b5a54d0b1/live",
+        // "https://viz.flowics.com/public/88e76302345390959725139ec6122a74/5d97e2b51965641b5a54d0b1/live",
+        "https://viz.flowics.com/public/7f1abbadc05d2db270a52cad6360327b/5ea703b94fa8ca5176941496/live",
     },
   };
   var source = {
