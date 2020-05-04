@@ -5,6 +5,8 @@ import "./styles.css";
 import { buildFlowicsUI } from "./VideoUI";
 import { UIFactory } from "bitmovin-player-ui";
 
+const Flowics = {};
+
 document.addEventListener("DOMContentLoaded", function (event) {
   var config: PlayerConfig = {
     key: "REPLACE-WITH-YOUR-KEY",
@@ -19,7 +21,8 @@ document.addEventListener("DOMContentLoaded", function (event) {
     flowics: {
       graphicsURL:
         // "https://viz.flowics.com/public/88e76302345390959725139ec6122a74/5d97e2b51965641b5a54d0b1/live",
-        "https://viz.flowics.com/public/7f1abbadc05d2db270a52cad6360327b/5ea703b94fa8ca5176941496/live",
+        // "https://viz.flowics.com/public/7f1abbadc05d2db270a52cad6360327b/5ea703b94fa8ca5176941496/live",
+        "http://dev.flowics.com:5000/public/7f1abbadc05d2db270a52cad6360327b/5ea703b94fa8ca5176941496/live",
     },
   };
   var sources = {
@@ -60,4 +63,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
       }
     );
   }
+
+  //@ts-ignore
+  // new window.Flowics.GraphicsOverlay().hello();
 });

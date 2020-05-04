@@ -5,6 +5,12 @@ import "./FlowicsOverlay.scss";
 import { DOM } from "bitmovin-player-ui/dist/js/framework/dom";
 import { ContainerConfig } from "bitmovin-player-ui/dist/js/framework/components/container";
 
+declare global {
+  interface Window {
+    Flowics: any;
+  }
+}
+
 type FlowicsConfig = {
   graphicsURL: string | null;
 };
@@ -14,6 +20,8 @@ export class FlowicsOverlay extends Container<ContainerConfig> {
     graphicsURL: null,
   };
 
+  private flowicsGraphicsOverlay: any;
+
   private iFrameInitialized: boolean = false;
   constructor(config = {}) {
     super(config);
@@ -21,6 +29,10 @@ export class FlowicsOverlay extends Container<ContainerConfig> {
     this.flowicsConfig = {
       graphicsURL: null,
     };
+    console.log("Llamando a constructor");
+
+    console.log("Instanciando Iframe");
+
     this.iFrameInitialized = false;
 
     this.config = this.mergeConfig(
@@ -44,6 +56,17 @@ export class FlowicsOverlay extends Container<ContainerConfig> {
     }
 
     this.flowicsConfig = uiConfig.flowics;
+
+    this.flowicsGraphicsOverlay = new window.Flowics.GraphicsOverlay({
+      syncGraphics: true,
+      delay: 0,
+      graphicsUrl: this.flowicsConfig.graphicsURL,
+      // graphicsURL:
+      //   "https://viz.flowics.com/public/7f1abbadc05d2db270a52cad6360327b/5ea703b94fa8ca5176941496/live",
+      className: `${this.config.cssPrefix}graphicsFrame`,
+      hidden: true,
+      onGraphicsLoad: this.onGraphicsLoad,
+    });
 
     // TODO handle on video end properly.
 
@@ -74,6 +97,21 @@ export class FlowicsOverlay extends Container<ContainerConfig> {
     player.on(PlayerEvent.TimeShifted, () => {
       this.showOverlayIfNeeded(player);
     });
+
+    //   player.on(PlayerEvent.TimeChanged, (event: PlayerEventBase) => {
+    //     this.flowicsGraphicsOverlay.notifyPlayerEvent(
+    //       Flowics.GraphicsOverlay.PlayerEvent
+    //     );
+    //   });
+  }
+
+  onGraphicsLoad(flowicsGraphicsOverlay: any) {
+    // TODO LLevar esto a configuración externa no dentro de este archivo
+    flowicsGraphicsOverlay.setTexts({
+      n25: "Buy USD 2",
+      n28: "Buy USD 5",
+    });
+    flowicsGraphicsOverlay.show();
   }
 
   showOverlayIfNeeded(player: PlayerAPI) {
@@ -100,21 +138,24 @@ export class FlowicsOverlay extends Container<ContainerConfig> {
     const iframe = this.buildIframe();
 
     this.getDomElement().append(iframe);
+    // this.flowicsGraphicsOverlay.show();
     this.iFrameInitialized = true;
   }
 
   buildIframe() {
-    return new DOM("iframe", {
-      class: `${this.config.cssPrefix}graphicsFrame`,
-      src: this.flowicsConfig.graphicsURL!.replace(/&amp;/gi, "&"),
-    }).css({
-      width: "100%",
-      height: "100%",
-      border: "none",
-    });
+    // return new DOM("iframe", {
+    //   class: `${this.config.cssPrefix}graphicsFrame`,
+    //   src: this.flowicsConfig.graphicsURL!.replace(/&amp;/gi, "&"),
+    // }).css({
+    //   width: "100%",
+    //   height: "100%",
+    //   border: "none",
+    // });
+    return new DOM(this.flowicsGraphicsOverlay.getIframe());
   }
 
   toDomElement() {
+    console.log("toDomElement");
     const mainWrap = new DOM("div", {
       class: this.getCssClasses(),
     }).css({
@@ -123,6 +164,8 @@ export class FlowicsOverlay extends Container<ContainerConfig> {
       height: "100%",
       zIndex: "1",
     });
+
+    // mainWrap.append(new DOM(this.flowicsGraphicsOverlay.getIframe()));
 
     return mainWrap;
   }
