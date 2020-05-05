@@ -6,3 +6,8 @@
 .flowics-overlay.flowics-hidden .flowicsgraphicsFrame {
   display: none;
 }
+
+.bmpui-ui-titlebar,
+.bmpui-ui-titlebar.bmpui-hidden {
+  z-index: 2;
+}
