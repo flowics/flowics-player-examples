@@ -63,7 +63,4 @@ document.addEventListener("DOMContentLoaded", function (event) {
       }
     );
   }
-
-  //@ts-ignore
-  // new window.Flowics.GraphicsOverlay().hello();
 });

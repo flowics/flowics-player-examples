@@ -29,10 +29,6 @@ export class FlowicsOverlay extends Container<ContainerConfig> {
     this.flowicsConfig = {
       graphicsURL: null,
     };
-    console.log("Llamando a constructor");
-
-    console.log("Instanciando Iframe");
-
     this.iFrameInitialized = false;
 
     this.config = this.mergeConfig(
