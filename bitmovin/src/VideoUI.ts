@@ -33,10 +33,47 @@ import {
   MetadataLabelContent,
   CastToggleButton,
   AirPlayToggleButton,
+  Watermark,
 } from "bitmovin-player-ui";
 import { FlowicsOverlay } from "./FlowicsOverlay";
 import { UIConditionContext } from "bitmovin-player-ui/dist/js/framework/uimanager";
 import { i18n } from "bitmovin-player-ui/dist/js/framework/localization/i18n";
+
+export function fbmpuiFlowicsSmallScreenUI() {
+  // TODO: It seems as though iOS FS doesn't work properly?
+  // TODO: Settings Bar?
+
+  return new UIContainer({
+    components: [
+      new BufferingOverlay(),
+      new CastStatusOverlay(),
+      new PlaybackToggleOverlay(),
+      new RecommendationOverlay(),
+      // controlBar,
+      new TitleBar({
+        components: [
+          new MetadataLabel({ content: MetadataLabelContent.Title }),
+          new PlaybackTimeLabel({
+            timeLabelMode: PlaybackTimeLabelMode.TotalTime,
+          }),
+          new VolumeToggleButton(), // new SettingsToggleButton({ settingsPanel: settingsPanel }),
+          new FullscreenToggleButton(),
+        ],
+      }),
+      // settingsPanel,
+      new FlowicsOverlay(),
+      new Watermark(),
+      new ErrorMessageOverlay(),
+    ],
+    cssClasses: ["ui-skin-smallscreen"],
+    hideDelay: 2000,
+    hidePlayerStateExceptions: [
+      PlayerUtils.PlayerState.Prepared,
+      PlayerUtils.PlayerState.Paused,
+      PlayerUtils.PlayerState.Finished,
+    ],
+  });
+}
 
 export function flowicsSmallScreenUI() {
   let mainSettingsPanelPage = new SettingsPanelPage({
