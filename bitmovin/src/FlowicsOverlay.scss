@@ -1,0 +1,23 @@
+.bmpui-ui-controlbar {
+  z-index: 20;
+  padding: 0;
+}
+
+.bmpui-ui-playbacktimelabel.bmpui-ui-playbacktimelabel-live {
+  margin-top: 9px;
+}
+
+.bmpui-ui-uicontainer {
+  &.bmpui-player-state-playing.bmpui-controls-hidden * {
+    z-index: 2;
+  }
+}
+
+.bmpui-ui-titlebar,
+.bmpui-ui-titlebar.bmpui-hidden {
+  z-index: 2;
+}
+
+.flowics-overlay.flowics-hidden .flowicsgraphicsFrame {
+  display: none;
+}

@@ -26,82 +26,26 @@ import {
   TitleBar,
   SettingsToggleButton,
   PlayerUtils,
+  PlaybackToggleOverlay,
+  CastStatusOverlay,
+  RecommendationOverlay,
+  MetadataLabel,
+  MetadataLabelContent,
+  CastToggleButton,
+  AirPlayToggleButton,
 } from "bitmovin-player-ui";
 import { FlowicsOverlay } from "./FlowicsOverlay";
 import { UIConditionContext } from "bitmovin-player-ui/dist/js/framework/uimanager";
 import { i18n } from "bitmovin-player-ui/dist/js/framework/localization/i18n";
 
-// function ui() {
-//   const controlBar = new ControlBar({
-//     components: [
-//       new Container({
-//         components: [
-//           new PlaybackTimeLabel({
-//             timeLabelMode: PlaybackTimeLabelMode.CurrentTime,
-//             hideInLivePlayback: true,
-//           }),
-//           new SeekBar({ label: new SeekBarLabel() }),
-//           new PlaybackTimeLabel({
-//             timeLabelMode: PlaybackTimeLabelMode.TotalTime,
-//             cssClasses: ["text-right"],
-//           }),
-//         ],
-//         cssClasses: ["controlbar-top"],
-//       }),
-//       new Container({
-//         components: [
-//           new PlaybackToggleButton(),
-//           new VolumeToggleButton(),
-//           new VolumeSlider(),
-//           new Spacer(),
-//         ],
-//         cssClasses: ["controlbar-bottom"],
-//       }),
-//     ],
-//   });
-
-//   const uiCont = new UIContainer({
-//     components: [
-//       new BufferingOverlay(),
-//       // If no overlay is present, the UI does not react
-//       // properly. Is a known issue: https://github.com/bitmovin/bitmovin-player-ui/pull/220
-//       new FlowicsOverlay(),
-//       controlBar,
-//       new ErrorMessageOverlay(),
-//     ],
-//   });
-
-//   return uiCont;
-// }
-
-// export function buildUI(videoPlayerInstance: PlayerAPI, uiConfig = {}) {
-//   return new UIManager(
-//     videoPlayerInstance,
-//     [
-//       {
-//         ui: ui(),
-//         condition: (context) => {
-//           return true;
-//         },
-//       },
-//     ],
-//     uiConfig
-//   );
-// }
-
 export function flowicsSmallScreenUI() {
-  // let subtitleOverlay = new SubtitleOverlay();
-
   let mainSettingsPanelPage = new SettingsPanelPage({
     components: [
       new SettingsPanelItem(
         i18n.getLocalizer("settings.video.quality"),
         new VideoQualitySelectBox()
       ),
-      // new SettingsPanelItem(
-      //   i18n.getLocalizer("speed"),
-      //   new PlaybackSpeedSelectBox()
-      // ),
+
       new SettingsPanelItem(
         i18n.getLocalizer("settings.audio.track"),
         new AudioTrackSelectBox()
@@ -120,39 +64,7 @@ export function flowicsSmallScreenUI() {
     hideDelay: -1,
   });
 
-  // let subtitleSettingsPanelPage = new SubtitleSettingsPanelPage({
-  //   settingsPanel: settingsPanel,
-  //   overlay: subtitleOverlay,
-  // });
-
-  // let subtitleSettingsOpenButton = new SettingsPanelPageOpenButton({
-  //   targetPage: subtitleSettingsPanelPage,
-  //   container: settingsPanel,
-  //   ariaLabel: i18n.getLocalizer("settings.subtitles"),
-  //   text: i18n.getLocalizer("open"),
-  // });
-
-  // const subtitleSelectBox = new SubtitleSelectBox();
-
-  // mainSettingsPanelPage.addComponent(
-  //   new SettingsPanelItem(
-  //     new SubtitleSettingsLabel({
-  //       text: i18n.getLocalizer("settings.subtitles"),
-  //       opener: subtitleSettingsOpenButton,
-  //     }),
-  //     subtitleSelectBox,
-  //     {
-  //       role: "menubar",
-  //     }
-  //   )
-  // );
-
-  // settingsPanel.addComponent(subtitleSettingsPanelPage);
-
   settingsPanel.addComponent(new CloseButton({ target: settingsPanel }));
-  // subtitleSettingsPanelPage.addComponent(
-  //   new CloseButton({ target: settingsPanel })
-  // );
 
   let controlBar = new ControlBar({
     components: [
@@ -175,20 +87,19 @@ export function flowicsSmallScreenUI() {
 
   return new UIContainer({
     components: [
-      // subtitleOverlay,
       new BufferingOverlay(),
       new FlowicsOverlay(),
-      // new CastStatusOverlay(),
-      // new PlaybackToggleOverlay(),
-      // new RecommendationOverlay(),
+      new CastStatusOverlay(),
+      new PlaybackToggleOverlay(),
+      new RecommendationOverlay(),
       controlBar,
       new TitleBar({
         components: [
-          // new MetadataLabel({ content: MetadataLabelContent.Title }),
-          // new CastToggleButton(),
+          new MetadataLabel({ content: MetadataLabelContent.Title }),
+          new CastToggleButton(),
           // new VRToggleButton(),
           // new PictureInPictureToggleButton(),
-          // new AirPlayToggleButton(),
+          new AirPlayToggleButton(),
           new Spacer(),
           new VolumeToggleButton(),
           new SettingsToggleButton({ settingsPanel: settingsPanel }),
@@ -247,6 +158,12 @@ export function flowicsUI() {
       new FlowicsOverlay(),
       controlBar,
       new ErrorMessageOverlay(),
+    ],
+    hideDelay: 2000,
+    hidePlayerStateExceptions: [
+      PlayerUtils.PlayerState.Prepared,
+      PlayerUtils.PlayerState.Paused,
+      PlayerUtils.PlayerState.Finished,
     ],
   });
 

@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 import { Container, UIManager, UIInstanceManager } from "bitmovin-player-ui";
 import { PlayerEvent, PlayerAPI, PlayerEventBase } from "bitmovin-player";
-import "./FlowicsOverlay.css";
+import "./FlowicsOverlay.scss";
 import { DOM } from "bitmovin-player-ui/dist/js/framework/dom";
 import { ContainerConfig } from "bitmovin-player-ui/dist/js/framework/components/container";
 
