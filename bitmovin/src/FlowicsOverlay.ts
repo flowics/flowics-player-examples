@@ -60,7 +60,6 @@ export class FlowicsOverlay extends Container<ContainerConfig> {
       // graphicsURL:
       //   "https://viz.flowics.com/public/7f1abbadc05d2db270a52cad6360327b/5ea703b94fa8ca5176941496/live",
       className: `${this.config.cssPrefix}graphicsFrame`,
-      hidden: true,
       onGraphicsLoad: this.onGraphicsLoad,
     });
 
@@ -103,6 +102,7 @@ export class FlowicsOverlay extends Container<ContainerConfig> {
 
   onGraphicsLoad(flowicsGraphicsOverlay: any) {
     // TODO LLevar esto a configuración externa no dentro de este archivo
+    console.log("Flowics Overlay: onGraphicsLoad Called");
     flowicsGraphicsOverlay.setTexts({
       n25: "Buy USD 2",
       n28: "Buy USD 5",
@@ -134,24 +134,15 @@ export class FlowicsOverlay extends Container<ContainerConfig> {
     const iframe = this.buildIframe();
 
     this.getDomElement().append(iframe);
-    // this.flowicsGraphicsOverlay.show();
     this.iFrameInitialized = true;
   }
 
   buildIframe() {
-    // return new DOM("iframe", {
-    //   class: `${this.config.cssPrefix}graphicsFrame`,
-    //   src: this.flowicsConfig.graphicsURL!.replace(/&amp;/gi, "&"),
-    // }).css({
-    //   width: "100%",
-    //   height: "100%",
-    //   border: "none",
-    // });
     return new DOM(this.flowicsGraphicsOverlay.getIframe());
   }
 
   toDomElement() {
-    console.log("toDomElement");
+    console.log("Flowics Overlay: toDomElement");
     const mainWrap = new DOM("div", {
       class: this.getCssClasses(),
     }).css({
@@ -160,8 +151,6 @@ export class FlowicsOverlay extends Container<ContainerConfig> {
       height: "100%",
       zIndex: "1",
     });
-
-    // mainWrap.append(new DOM(this.flowicsGraphicsOverlay.getIframe()));
 
     return mainWrap;
   }
