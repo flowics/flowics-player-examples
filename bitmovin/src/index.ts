@@ -1,4 +1,9 @@
-import { Player, PlayerConfig } from "bitmovin-player";
+import {
+  Player,
+  PlayerConfig,
+  PlayerEvent,
+  TimeChangedEvent,
+} from "bitmovin-player";
 
 import "bitmovin-player/bitmovinplayer-ui.css";
 import "./styles.css";
@@ -22,7 +27,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
       graphicsURL:
         // "https://viz.flowics.com/public/88e76302345390959725139ec6122a74/5d97e2b51965641b5a54d0b1/live",
         // "https://viz.flowics.com/public/7f1abbadc05d2db270a52cad6360327b/5ea703b94fa8ca5176941496/live",
-        "http://dev.flowics.com:5000/public/7f1abbadc05d2db270a52cad6360327b/5ea703b94fa8ca5176941496/live",
+        "http://dev.flowics.com:5000/public/b0a621640be089b04dd04f3914f8b8c7/5eb2c7cc3a50ac15ca98f8b4/live",
     },
   };
   var sources = {
@@ -37,7 +42,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
     live: {
       wowza: {
         hls:
-          "https://cdn3.wowza.com/1/bGxnZ2dzbjk3TEJr/SVd1TlZu/hls/live/playlist.m3u8",
+          "https://cdn3.wowza.com/1/NjBlYVp0VVVIT2x5/c1N0WG9l/hls/live/playlist.m3u8",
         poster:
           "https://bitdash-a.akamaihd.net/content/MI201109210084_1/poster.jpg",
       },
@@ -54,7 +59,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
     const player = new Player(container, config);
     const uiInstance = buildFlowicsUI(player, uiConfig);
 
-    player.load(sources.live.cnn).then(
+    player.load(sources.live.wowza).then(
       function () {
         console.log("Successfully created Bitmovin Player instance");
       },
@@ -62,5 +67,18 @@ document.addEventListener("DOMContentLoaded", function (event) {
         console.log("Error while creating Bitmovin Player instance");
       }
     );
+
+    player.on(PlayerEvent.TimeChanged, (event) => {
+      document.getElementById("timestamp")!.innerText = new Date(
+        event.timestamp
+      ).toString();
+      document.getElementById("time")!.innerText = new Date(
+        (event as TimeChangedEvent).time * 1000
+      ).toString();
+      document.getElementById("delay")!.innerText = (
+        event.timestamp -
+        (event as TimeChangedEvent).time * 1000
+      ).toString();
+    });
   }
 });

@@ -1,6 +1,11 @@
 /* eslint-disable no-console */
 import { Container, UIManager, UIInstanceManager } from "bitmovin-player-ui";
-import { PlayerEvent, PlayerAPI, PlayerEventBase } from "bitmovin-player";
+import {
+  PlayerEvent,
+  PlayerAPI,
+  PlayerEventBase,
+  TimeChangedEvent,
+} from "bitmovin-player";
 import "./FlowicsOverlay.scss";
 import { DOM } from "bitmovin-player-ui/dist/js/framework/dom";
 import { ContainerConfig } from "bitmovin-player-ui/dist/js/framework/components/container";
@@ -55,7 +60,7 @@ export class FlowicsOverlay extends Container<ContainerConfig> {
 
     this.flowicsGraphicsOverlay = new window.Flowics.GraphicsOverlay({
       syncGraphics: true,
-      delay: 0,
+      delay: 500,
       graphicsUrl: this.flowicsConfig.graphicsURL,
       // graphicsURL:
       //   "https://viz.flowics.com/public/7f1abbadc05d2db270a52cad6360327b/5ea703b94fa8ca5176941496/live",
@@ -93,11 +98,11 @@ export class FlowicsOverlay extends Container<ContainerConfig> {
       this.showOverlayIfNeeded(player);
     });
 
-    //   player.on(PlayerEvent.TimeChanged, (event: PlayerEventBase) => {
-    //     this.flowicsGraphicsOverlay.notifyPlayerEvent(
-    //       Flowics.GraphicsOverlay.PlayerEvent
-    //     );
-    //   });
+    player.on(PlayerEvent.TimeChanged, (event: PlayerEventBase) => {
+      this.flowicsGraphicsOverlay.notifyVideoSegment(
+        (event as TimeChangedEvent).time
+      );
+    });
   }
 
   onGraphicsLoad(flowicsGraphicsOverlay: any) {
@@ -112,11 +117,11 @@ export class FlowicsOverlay extends Container<ContainerConfig> {
 
   showOverlayIfNeeded(player: PlayerAPI) {
     if (player.isLive()) {
-      if (player.getTimeShift() === 0) {
-        this.showOverlay();
-      } else {
-        this.hide();
-      }
+      // if (player.getTimeShift() === 0) {
+      this.showOverlay();
+      // } else {
+      // this.hide();
+      // }
     } else {
       this.showOverlay();
     }
