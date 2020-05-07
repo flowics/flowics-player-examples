@@ -106,10 +106,7 @@ export function flowicsSmallScreenUI() {
     components: [
       new Container({
         components: [
-          new PlaybackTimeLabel({
-            timeLabelMode: PlaybackTimeLabelMode.CurrentTime,
-            hideInLivePlayback: true,
-          }),
+          new PlaybackToggleButton(),
           new SeekBar({ label: new SeekBarLabel() }),
           new PlaybackTimeLabel({
             timeLabelMode: PlaybackTimeLabelMode.TotalTime,
@@ -118,47 +115,12 @@ export function flowicsSmallScreenUI() {
         ],
         cssClasses: ['controlbar-top'],
       }),
-    ],
   });
-
-  // return new UIContainer({
-  //   components: [
-  //     new BufferingOverlay(),
-  //     new FlowicsOverlay(),
-  //     new CastStatusOverlay(),
-  //     new PlaybackToggleOverlay(),
-  //     new RecommendationOverlay(),
-  //     controlBar,
-  //     new TitleBar({
-  //       components: [
-  //         new MetadataLabel({ content: MetadataLabelContent.Title }),
-  //         new CastToggleButton(),
-  //         new VRToggleButton(),
-  //         new PictureInPictureToggleButton(),
-  //         new AirPlayToggleButton(),
-  //         new Spacer(),
-  //         new VolumeToggleButton(),
-  //         new SettingsToggleButton({ settingsPanel: settingsPanel }),
-  //         new FullscreenToggleButton(),
-  //       ],
-  //     }),
-  //     settingsPanel,
-  //     new ErrorMessageOverlay(),
-  //   ],
-  //   cssClasses: ['ui-skin-smallscreen'],
-  //   hideDelay: 2000,
-  //   hidePlayerStateExceptions: [
-  //     PlayerUtils.PlayerState.Prepared,
-  //     PlayerUtils.PlayerState.Paused,
-  //     PlayerUtils.PlayerState.Finished,
-  //   ],
-  // });
 
   return new UIContainer({
     components: [
       new BufferingOverlay(),
       new CastStatusOverlay(),
-      new PlaybackToggleOverlay(),
       new TitleBar({
         components: [
           new MetadataLabel({ content: MetadataLabelContent.Title }),

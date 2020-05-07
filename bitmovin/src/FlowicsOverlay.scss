@@ -13,6 +13,11 @@
   }
 }
 
+.bmpui-ui-playbacktogglebutton.bmpui-off,
+.bmpui-ui-playbacktogglebutton.bmpui-on {
+  margin-top: -7px !important;
+}
+
 .bmpui-ui-titlebar,
 .bmpui-ui-titlebar.bmpui-hidden {
   z-index: 2;
