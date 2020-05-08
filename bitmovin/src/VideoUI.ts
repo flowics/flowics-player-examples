@@ -36,48 +36,17 @@ import {
   Watermark,
   VRToggleButton,
   PictureInPictureToggleButton,
+  Component,
 } from 'bitmovin-player-ui';
 import { FlowicsOverlay } from './FlowicsOverlay';
 import { UIConditionContext } from 'bitmovin-player-ui/dist/js/framework/uimanager';
 import { i18n } from 'bitmovin-player-ui/dist/js/framework/localization/i18n';
 
-export function fbmpuiFlowicsSmallScreenUI() {
-  // TODO: It seems as though iOS FS doesn't work properly?
-  // TODO: Settings Bar?
-
-  return new UIContainer({
-    components: [
-      new BufferingOverlay(),
-      new CastStatusOverlay(),
-      new PlaybackToggleOverlay(),
-      new RecommendationOverlay(),
-      // controlBar,
-      new TitleBar({
-        components: [
-          new MetadataLabel({ content: MetadataLabelContent.Title }),
-          new PlaybackTimeLabel({
-            timeLabelMode: PlaybackTimeLabelMode.TotalTime,
-          }),
-          new VolumeToggleButton(), // new SettingsToggleButton({ settingsPanel: settingsPanel }),
-          new FullscreenToggleButton(),
-        ],
-      }),
-      // settingsPanel,
-      new FlowicsOverlay(),
-      new Watermark(),
-      new ErrorMessageOverlay(),
-    ],
-    cssClasses: ['ui-skin-smallscreen'],
-    hideDelay: 2000,
-    hidePlayerStateExceptions: [
-      PlayerUtils.PlayerState.Prepared,
-      PlayerUtils.PlayerState.Paused,
-      PlayerUtils.PlayerState.Finished,
-    ],
-  });
+interface FlowicsUIConfig {
+  showControls: boolean;
 }
 
-export function flowicsSmallScreenUI() {
+export function flowicsSmallScreenUI(flowicsConfig: FlowicsUIConfig) {
   let mainSettingsPanelPage = new SettingsPanelPage({
     components: [
       new SettingsPanelItem(
@@ -115,9 +84,10 @@ export function flowicsSmallScreenUI() {
         ],
         cssClasses: ['controlbar-top'],
       }),
+    ],
   });
 
-  return new UIContainer({
+  const uiCont = new UIContainer({
     components: [
       new BufferingOverlay(),
       new CastStatusOverlay(),
@@ -141,9 +111,13 @@ export function flowicsSmallScreenUI() {
       PlayerUtils.PlayerState.Finished,
     ],
   });
+
+  removeComponent(uiCont, !flowicsConfig.showControls, controlBar);
+
+  return uiCont;
 }
 
-export function flowicsUI() {
+export function flowicsUI(flowicsConfig: FlowicsUIConfig) {
   const controlBar = new ControlBar({
     components: [
       new Container({
@@ -190,12 +164,22 @@ export function flowicsUI() {
     ],
   });
 
+  removeComponent(uiCont, !flowicsConfig.showControls, controlBar);
+
   return uiCont;
+}
+
+function removeComponent(container: UIContainer, condition: boolean, component: Component<any>) {
+  if (condition) return container.removeComponent(component);
 }
 
 export function buildFlowicsUI(player: PlayerAPI, config: UIConfig = {}): UIManager {
   // show smallScreen UI only on mobile/handheld devices
   let smallScreenSwitchWidth = 600;
+
+  const flowicsUIConfig = {
+    showControls: false,
+  };
 
   return new UIManager(
     player,
@@ -218,7 +202,7 @@ export function buildFlowicsUI(player: PlayerAPI, config: UIConfig = {}): UIMana
         },
       },
       {
-        ui: flowicsSmallScreenUI(),
+        ui: flowicsSmallScreenUI(flowicsUIConfig),
         condition: (context: UIConditionContext) => {
           return (
             !context.isAd &&
@@ -229,7 +213,7 @@ export function buildFlowicsUI(player: PlayerAPI, config: UIConfig = {}): UIMana
         },
       },
       {
-        ui: flowicsUI(),
+        ui: flowicsUI(flowicsUIConfig),
         condition: (context: UIConditionContext) => {
           return !context.isAd && !context.adRequiresUi;
         },
