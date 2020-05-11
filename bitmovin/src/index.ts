@@ -78,7 +78,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
     const player = new Player(container, config);
     const uiInstance = buildFlowicsUI(player, uiConfig);
 
-    player.load(sources.live.wowza.marc).then(
+    player.load(sources.live.cnn).then(
       function () {
         console.log("Successfully created Bitmovin Player instance");
       },

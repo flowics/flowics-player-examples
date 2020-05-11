@@ -61,6 +61,7 @@ export class FlowicsOverlay extends Container<ContainerConfig> {
     this.flowicsGraphicsOverlay = new window.Flowics.GraphicsOverlay({
       syncGraphics: true,
       delay: 500,
+      enableActionNotifier: true,
       graphicsUrl: this.flowicsConfig.graphicsURL,
       // graphicsURL:
       //   "https://viz.flowics.com/public/7f1abbadc05d2db270a52cad6360327b/5ea703b94fa8ca5176941496/live",
