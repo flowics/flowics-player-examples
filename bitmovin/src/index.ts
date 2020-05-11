@@ -31,7 +31,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
     },
     marc: {
       buy:
-        "http://dev.flowics.com:5000/public/b0a621640be089b04dd04f3914f8b8c7/5eb2c7cc3a50ac15ca98f8b4/live",
+        "http://dev.flowics.com:5000/public/b0a621640be089b04dd04f3914f8b8c7/5eb5a8c53eb022227539b1be/live",
     },
     live_demo:
       "https://viz.flowics.com/public/88e76302345390959725139ec6122a74/5d97e2b51965641b5a54d0b1/live",

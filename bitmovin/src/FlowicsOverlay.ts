@@ -27,6 +27,8 @@ export class FlowicsOverlay extends Container<ContainerConfig> {
 
   private flowicsGraphicsOverlay: any;
 
+  private eventHandler: any;
+
   private iFrameInitialized: boolean = false;
   constructor(config = {}) {
     super(config);
@@ -48,6 +50,23 @@ export class FlowicsOverlay extends Container<ContainerConfig> {
     );
   }
 
+  buildEventHandler = (
+    eventType: string,
+    player: PlayerAPI,
+    uiManager: UIInstanceManager
+  ) => {
+    switch (eventType) {
+      case "onClick": {
+        player.pause();
+      }
+      case "onMouseEnter": {
+        // uiManger.showContainers() ?
+      }
+      default:
+        return;
+    }
+  };
+
   configure(player: PlayerAPI, uiManager: UIInstanceManager) {
     // TODO See how to pass this correctly
     const uiConfig: any = uiManager.getConfig();
@@ -58,15 +77,19 @@ export class FlowicsOverlay extends Container<ContainerConfig> {
 
     this.flowicsConfig = uiConfig.flowics;
 
+    const eventHandler = (eventType: string) =>
+      this.buildEventHandler(eventType, player, uiConfig);
+
     this.flowicsGraphicsOverlay = new window.Flowics.GraphicsOverlay({
       syncGraphics: true,
-      delay: 500,
-      enableActionNotifier: true,
+      delay: 0,
+      enableEventsNotifier: true,
       graphicsUrl: this.flowicsConfig.graphicsURL,
       // graphicsURL:
       //   "https://viz.flowics.com/public/7f1abbadc05d2db270a52cad6360327b/5ea703b94fa8ca5176941496/live",
       className: `${this.config.cssPrefix}graphicsFrame`,
       onGraphicsLoad: this.onGraphicsLoad,
+      eventHandler,
     });
 
     // TODO handle on video end properly.
