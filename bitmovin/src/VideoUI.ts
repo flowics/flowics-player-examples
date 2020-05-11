@@ -42,11 +42,7 @@ import { FlowicsOverlay } from './FlowicsOverlay';
 import { UIConditionContext } from 'bitmovin-player-ui/dist/js/framework/uimanager';
 import { i18n } from 'bitmovin-player-ui/dist/js/framework/localization/i18n';
 
-interface FlowicsUIConfig {
-  showControls: boolean;
-}
-
-export function flowicsSmallScreenUI(flowicsConfig: FlowicsUIConfig) {
+export function flowicsSmallScreenUI() {
   let mainSettingsPanelPage = new SettingsPanelPage({
     components: [
       new SettingsPanelItem(
@@ -112,12 +108,10 @@ export function flowicsSmallScreenUI(flowicsConfig: FlowicsUIConfig) {
     ],
   });
 
-  removeComponent(uiCont, !flowicsConfig.showControls, controlBar);
-
   return uiCont;
 }
 
-export function flowicsUI(flowicsConfig: FlowicsUIConfig) {
+export function flowicsUI() {
   const controlBar = new ControlBar({
     components: [
       new Container({
@@ -164,45 +158,18 @@ export function flowicsUI(flowicsConfig: FlowicsUIConfig) {
     ],
   });
 
-  removeComponent(uiCont, !flowicsConfig.showControls, controlBar);
-
   return uiCont;
-}
-
-function removeComponent(container: UIContainer, condition: boolean, component: Component<any>) {
-  if (condition) return container.removeComponent(component);
 }
 
 export function buildFlowicsUI(player: PlayerAPI, config: UIConfig = {}): UIManager {
   // show smallScreen UI only on mobile/handheld devices
   let smallScreenSwitchWidth = 600;
 
-  const flowicsUIConfig = {
-    showControls: false,
-  };
-
   return new UIManager(
     player,
     [
       {
-        ui: UIFactory.modernSmallScreenAdsUI(),
-        condition: (context: UIConditionContext) => {
-          return (
-            context.isMobile &&
-            context.documentWidth < smallScreenSwitchWidth &&
-            context.isAd &&
-            context.adRequiresUi
-          );
-        },
-      },
-      {
-        ui: UIFactory.modernAdsUI(),
-        condition: (context: UIConditionContext) => {
-          return context.isAd && context.adRequiresUi;
-        },
-      },
-      {
-        ui: flowicsSmallScreenUI(flowicsUIConfig),
+        ui: flowicsSmallScreenUI(),
         condition: (context: UIConditionContext) => {
           return (
             !context.isAd &&
@@ -213,10 +180,7 @@ export function buildFlowicsUI(player: PlayerAPI, config: UIConfig = {}): UIMana
         },
       },
       {
-        ui: flowicsUI(flowicsUIConfig),
-        condition: (context: UIConditionContext) => {
-          return !context.isAd && !context.adRequiresUi;
-        },
+        ui: flowicsUI(),
       },
     ],
     config
