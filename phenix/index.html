@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>View Channel</title>
+    <link rel="stylesheet" href="main.css" />
+    <script src="https://dl.phenixrts.com/WebSDK/2020.1.latest/phenix-web-sdk.min.js"></script>
+    <script>
+      var __phenixPageLoadTime = new Date().getTime();
+    </script>
+  </head>
+  <body class="main">
+    <h1>Flowics Graphics over Phenix Channel Viewer Example</h1>
+    <div class="custom-player">
+      <div class="aspect-ratio">
+        <div class="aspect-ratio-content">
+          <div class="player">
+            <video
+              id="myVideoId"
+              width="1280"
+              height="720"
+              autoplay
+              playsinline
+            ></video>
+          </div>
+
+          <iframe
+            class="flowics-iframe"
+            src="https://viz.flowics.com/public/88e76302345390959725139ec6122a74/5d97e2b51965641b5a54d0b1/live"
+          ></iframe>
+        </div>
+      </div>
+    </div>
+    <br />
+    <button id="playButton" style="display: none;">Play</button>
+    <button id="unmuteButton" style="display: none;">Unmute</button>
+    <p id="userMessage"></p>
+    <h2 id="statusMessage"></h2>
+    <script src="main.js"></script>
+  </body>
+</html>
