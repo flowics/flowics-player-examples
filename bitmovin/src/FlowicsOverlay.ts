@@ -57,10 +57,11 @@ export class FlowicsOverlay extends Container<ContainerConfig> {
   ) => {
     switch (eventType) {
       case "onClick": {
+        console.log("Event Handler: onClick");
         player.pause();
       }
       case "onMouseEnter": {
-        // uiManger.showContainers() ?
+        console.log("Event Handler: onMouseEnter");
       }
       default:
         return;
