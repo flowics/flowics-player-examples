@@ -15,13 +15,7 @@
       <div class="aspect-ratio">
         <div class="aspect-ratio-content">
           <div class="player">
-            <video
-              id="myVideoId"
-              width="1280"
-              height="720"
-              autoplay
-              playsinline
-            ></video>
+            <video id="myVideoId" autoplay playsinline></video>
           </div>
 
           <iframe
@@ -31,9 +25,11 @@
         </div>
       </div>
     </div>
-    <br />
-    <button id="playButton" style="display: none;">Play</button>
-    <button id="unmuteButton" style="display: none;">Unmute</button>
+    <div class="player__control-bar">
+      <button id="playButton" class="button"><div class="play"><div></button>
+      <button id="unmuteButton" class="button"><div class="pause"></div></button>
+      <button id="fullscreen" class="button">Fullscreen</button>
+    </div>
     <p id="userMessage"></p>
     <h2 id="statusMessage"></h2>
     <script src="main.js"></script>
