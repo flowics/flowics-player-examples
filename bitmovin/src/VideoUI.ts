@@ -1,4 +1,4 @@
-import { PlayerAPI, UIConfig } from "bitmovin-player";
+import { PlayerAPI, UIConfig } from 'bitmovin-player';
 import {
   UIManager,
   UIContainer,
@@ -34,61 +34,25 @@ import {
   CastToggleButton,
   AirPlayToggleButton,
   Watermark,
-} from "bitmovin-player-ui";
-import { FlowicsOverlay } from "./FlowicsOverlay";
-import { UIConditionContext } from "bitmovin-player-ui/dist/js/framework/uimanager";
-import { i18n } from "bitmovin-player-ui/dist/js/framework/localization/i18n";
-
-export function fbmpuiFlowicsSmallScreenUI() {
-  // TODO: It seems as though iOS FS doesn't work properly?
-  // TODO: Settings Bar?
-
-  return new UIContainer({
-    components: [
-      new BufferingOverlay(),
-      new CastStatusOverlay(),
-      new PlaybackToggleOverlay(),
-      new RecommendationOverlay(),
-      // controlBar,
-      new TitleBar({
-        components: [
-          new MetadataLabel({ content: MetadataLabelContent.Title }),
-          new PlaybackTimeLabel({
-            timeLabelMode: PlaybackTimeLabelMode.TotalTime,
-          }),
-          new VolumeToggleButton(), // new SettingsToggleButton({ settingsPanel: settingsPanel }),
-          new FullscreenToggleButton(),
-        ],
-      }),
-      // settingsPanel,
-      new FlowicsOverlay(),
-      new Watermark(),
-      new ErrorMessageOverlay(),
-    ],
-    cssClasses: ["ui-skin-smallscreen"],
-    hideDelay: 2000,
-    hidePlayerStateExceptions: [
-      PlayerUtils.PlayerState.Prepared,
-      PlayerUtils.PlayerState.Paused,
-      PlayerUtils.PlayerState.Finished,
-    ],
-  });
-}
+  VRToggleButton,
+  PictureInPictureToggleButton,
+  Component,
+} from 'bitmovin-player-ui';
+import { FlowicsOverlay } from './FlowicsOverlay';
+import { UIConditionContext } from 'bitmovin-player-ui/dist/js/framework/uimanager';
+import { i18n } from 'bitmovin-player-ui/dist/js/framework/localization/i18n';
 
 export function flowicsSmallScreenUI() {
   let mainSettingsPanelPage = new SettingsPanelPage({
     components: [
       new SettingsPanelItem(
-        i18n.getLocalizer("settings.video.quality"),
+        i18n.getLocalizer('settings.video.quality'),
         new VideoQualitySelectBox()
       ),
 
+      new SettingsPanelItem(i18n.getLocalizer('settings.audio.track'), new AudioTrackSelectBox()),
       new SettingsPanelItem(
-        i18n.getLocalizer("settings.audio.track"),
-        new AudioTrackSelectBox()
-      ),
-      new SettingsPanelItem(
-        i18n.getLocalizer("settings.audio.quality"),
+        i18n.getLocalizer('settings.audio.quality'),
         new AudioQualitySelectBox()
       ),
     ],
@@ -107,47 +71,35 @@ export function flowicsSmallScreenUI() {
     components: [
       new Container({
         components: [
-          new PlaybackTimeLabel({
-            timeLabelMode: PlaybackTimeLabelMode.CurrentTime,
-            hideInLivePlayback: true,
-          }),
+          new PlaybackToggleButton(),
           new SeekBar({ label: new SeekBarLabel() }),
           new PlaybackTimeLabel({
             timeLabelMode: PlaybackTimeLabelMode.TotalTime,
-            cssClasses: ["text-right"],
+            cssClasses: ['text-right'],
           }),
         ],
-        cssClasses: ["controlbar-top"],
+        cssClasses: ['controlbar-top'],
       }),
     ],
   });
 
-  return new UIContainer({
+  const uiCont = new UIContainer({
     components: [
       new BufferingOverlay(),
-      new FlowicsOverlay(),
       new CastStatusOverlay(),
-      new PlaybackToggleOverlay(),
-      new RecommendationOverlay(),
-      controlBar,
       new TitleBar({
         components: [
           new MetadataLabel({ content: MetadataLabelContent.Title }),
-          new CastToggleButton(),
-          // new VRToggleButton(),
-          // new PictureInPictureToggleButton(),
-          new AirPlayToggleButton(),
-          new Spacer(),
-          new VolumeToggleButton(),
-          new SettingsToggleButton({ settingsPanel: settingsPanel }),
+          new VolumeToggleButton(), // new SettingsToggleButton({ settingsPanel: settingsPanel }),
           new FullscreenToggleButton(),
         ],
       }),
-      settingsPanel,
-      // new Watermark(),
+      // settingsPanel,
+      new FlowicsOverlay(),
       new ErrorMessageOverlay(),
+      controlBar,
     ],
-    cssClasses: ["ui-skin-smallscreen"],
+    cssClasses: ['ui-skin-smallscreen'],
     hideDelay: 2000,
     hidePlayerStateExceptions: [
       PlayerUtils.PlayerState.Prepared,
@@ -155,6 +107,8 @@ export function flowicsSmallScreenUI() {
       PlayerUtils.PlayerState.Finished,
     ],
   });
+
+  return uiCont;
 }
 
 export function flowicsUI() {
@@ -169,10 +123,10 @@ export function flowicsUI() {
           new SeekBar({ label: new SeekBarLabel() }),
           new PlaybackTimeLabel({
             timeLabelMode: PlaybackTimeLabelMode.TotalTime,
-            cssClasses: ["text-right"],
+            cssClasses: ['text-right'],
           }),
         ],
-        cssClasses: ["controlbar-top"],
+        cssClasses: ['controlbar-top'],
       }),
       new Container({
         components: [
@@ -182,7 +136,7 @@ export function flowicsUI() {
           new Spacer(),
           new FullscreenToggleButton(),
         ],
-        cssClasses: ["controlbar-bottom"],
+        cssClasses: ['controlbar-bottom'],
       }),
     ],
   });
@@ -207,33 +161,13 @@ export function flowicsUI() {
   return uiCont;
 }
 
-export function buildFlowicsUI(
-  player: PlayerAPI,
-  config: UIConfig = {}
-): UIManager {
+export function buildFlowicsUI(player: PlayerAPI, config: UIConfig = {}): UIManager {
   // show smallScreen UI only on mobile/handheld devices
   let smallScreenSwitchWidth = 600;
 
   return new UIManager(
     player,
     [
-      {
-        ui: UIFactory.modernSmallScreenAdsUI(),
-        condition: (context: UIConditionContext) => {
-          return (
-            context.isMobile &&
-            context.documentWidth < smallScreenSwitchWidth &&
-            context.isAd &&
-            context.adRequiresUi
-          );
-        },
-      },
-      {
-        ui: UIFactory.modernAdsUI(),
-        condition: (context: UIConditionContext) => {
-          return context.isAd && context.adRequiresUi;
-        },
-      },
       {
         ui: flowicsSmallScreenUI(),
         condition: (context: UIConditionContext) => {
@@ -247,9 +181,6 @@ export function buildFlowicsUI(
       },
       {
         ui: flowicsUI(),
-        condition: (context: UIConditionContext) => {
-          return !context.isAd && !context.adRequiresUi;
-        },
       },
     ],
     config
