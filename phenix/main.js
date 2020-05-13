@@ -41,19 +41,19 @@ var adminApiProxyClient = new sdk.net.AdminApiProxyClient();
 adminApiProxyClient.setBackendUri(backendUri);
 adminApiProxyClient.setAuthenticationData({
   userId: "my-user-id-that-is-NOT-related-to-application-id",
-  password: "my-password-that-is-NOT-related-to-secret"
+  password: "my-password-that-is-NOT-related-to-secret",
 });
 
 var channelExpressOptions = {
   features: features,
-  adminApiProxyClient: adminApiProxyClient
+  adminApiProxyClient: adminApiProxyClient,
 };
 
 var joinChannelOptions = {
   alias: channelAlias,
   videoElement: videoElement,
   // Select the most recent publisher in the channel
-  streamSelectionStrategy: "most-recent"
+  streamSelectionStrategy: "most-recent",
   // Alternatively, select one of multiple High-Availability publishers in the channel
   // streamSelectionStrategy: 'high-availability'
 };
@@ -210,13 +210,13 @@ function joinChannel() {
 
             if (isMobileAppleDevice && reason === "failed-to-play") {
               // IOS battery saver mode requires user interaction with the <video> to play video
-              videoElement.onplay = function() {
+              videoElement.onplay = function () {
                 setStatusMessage("Video play()");
                 response.renderer.start(videoElement);
                 videoElement.onplay = null;
               };
             } else {
-              document.getElementById("playButton").onclick = function() {
+              document.getElementById("playButton").onclick = function () {
                 setStatusMessage("User triggered play()");
                 response.renderer.start(videoElement);
                 document.getElementById("playButton").style.display = "none";
@@ -230,7 +230,7 @@ function joinChannel() {
           response.renderer.on("ended", function handleEnded(reason) {
             setStatusMessage('Video ended: "' + reason + '"');
 
-            document.getElementById("playButton").onclick = function() {
+            document.getElementById("playButton").onclick = function () {
               setStatusMessage("User triggered play()");
               joinChannel();
               document.getElementById("playButton").style.display = "none";
@@ -257,31 +257,43 @@ function setStatusMessage(message) {
 
 // FLOWICS
 
-const player = document.querySelector(".custom-player");
+const player = document.querySelector("#customPlayer");
 const fsButton = document.querySelector("#fullscreen");
-const iframe = document.querySelector(".flowics-iframe");
+const iframe = document.querySelector("#flowicsIframe");
 const pauseButton = document.querySelector("#pauseButton");
 const playButton = document.querySelector("#playButton");
 
-fsButton.addEventListener("click", ev => {
-  if (player.requestFullScreen) {
-    player.requestFullScreen();
-  } else if (player.webkitRequestFullScreen) {
-    player.webkitRequestFullScreen();
-  } else if (player.mozRequestFullScreen) {
-    player.mozRequestFullScreen();
-  }
+fsButton.addEventListener("click", (ev) => {
+  toggleFullscreen();
 });
 
-pauseButton.addEventListener("click", ev => {
+function toggleFullscreen() {
+  if (!document.fullscreenElement) {
+    player
+      .requestFullscreen()
+      .then(() => {
+        player.classList.add("fullscreen");
+      })
+      .catch((err) => {
+        alert(
+          `Error attempting to enable full-screen mode: ${err.message} (${err.name})`
+        );
+      });
+  } else {
+    document.exitFullscreen();
+    player.classList.remove("fullscreen");
+  }
+}
+
+pauseButton.addEventListener("click", (ev) => {
   iframe.style.display = "none";
 });
 
-playButton.addEventListener("click", ev => {
+playButton.addEventListener("click", (ev) => {
   iframe.style.display = "initial";
 });
 
-document.getElementById("unmuteButton").onclick = function() {
+document.getElementById("unmuteButton").onclick = function () {
   document.getElementById("myVideoId").muted = false;
   // document.getElementById("unmuteButton").style.display = "none";
   setStatusMessage("");

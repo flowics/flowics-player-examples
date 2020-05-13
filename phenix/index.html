@@ -12,19 +12,14 @@
   </head>
   <body class="main">
     <h1>Flowics Graphics over Phenix Channel Viewer Example</h1>
-    <div class="custom-player">
-      <div class="aspect-ratio">
-        <div class="aspect-ratio-content">
-          <div class="player">
-            <video id="myVideoId"
-            autoplay playsinline></video>
-          </div>
-
-          <iframe
-            class="flowics-iframe"
-            src="https://viz.flowics.com/public/88e76302345390959725139ec6122a74/5d97e2b51965641b5a54d0b1/live"
-          ></iframe>
-        </div>
+    <div id="customPlayer" class="custom-player">
+      <div class="video-wrapper">
+        <video id="myVideoId" class="video-element" autoplay playsinline></video>
+        <iframe
+          id="flowicsIframe"
+          class="flowics-iframe"
+          src="https://viz.flowics.com/public/88e76302345390959725139ec6122a74/5d97e2b51965641b5a54d0b1/live"
+        ></iframe>
       </div>
       <div class="player__control-bar">
         <button id="playButton" class="button"><div class="play"><div></button>
