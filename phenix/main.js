@@ -259,6 +259,9 @@ function setStatusMessage(message) {
 
 const player = document.querySelector(".custom-player");
 const fsButton = document.querySelector("#fullscreen");
+const iframe = document.querySelector(".flowics-iframe");
+const pauseButton = document.querySelector("#pauseButton");
+const playButton = document.querySelector("#playButton");
 
 fsButton.addEventListener("click", ev => {
   if (player.requestFullScreen) {
@@ -268,6 +271,14 @@ fsButton.addEventListener("click", ev => {
   } else if (player.mozRequestFullScreen) {
     player.mozRequestFullScreen();
   }
+});
+
+pauseButton.addEventListener("click", ev => {
+  iframe.style.display = "none";
+});
+
+playButton.addEventListener("click", ev => {
+  iframe.style.display = "initial";
 });
 
 document.getElementById("unmuteButton").onclick = function() {
