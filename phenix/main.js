@@ -203,13 +203,13 @@ function joinChannel() {
 
             if (isMobileAppleDevice && reason === 'failed-to-play') {
               // IOS battery saver mode requires user interaction with the <video> to play video
-              videoElement.onplay = function () {
+              videoElement.onplay = function() {
                 setStatusMessage('Video play()');
                 response.renderer.start(videoElement);
                 videoElement.onplay = null;
               };
             } else {
-              document.getElementById('playButton').onclick = function () {
+              document.getElementById('playButton').onclick = function() {
                 setStatusMessage('User triggered play()');
                 response.renderer.start(videoElement);
                 document.getElementById('playButton').style.display = 'none';
@@ -223,7 +223,7 @@ function joinChannel() {
           response.renderer.on('ended', function handleEnded(reason) {
             setStatusMessage('Video ended: "' + reason + '"');
 
-            document.getElementById('playButton').onclick = function () {
+            document.getElementById('playButton').onclick = function() {
               setStatusMessage('User triggered play()');
               joinChannel();
               document.getElementById('playButton').style.display = 'none';
@@ -250,15 +250,28 @@ function setStatusMessage(message) {
 
 // FLOWICS CONFIGS //
 
+document.addEventListener('fullscreenchange', exitFullscreenHandler);
+
 const player = document.querySelector('#customPlayer');
 const fsButton = document.querySelector('#fullscreen');
 const iframe = document.querySelector('#flowicsIframe');
 const pauseButton = document.querySelector('#pauseButton');
 const playButton = document.querySelector('#playButton');
 
-fsButton.addEventListener('click', (ev) => {
+fsButton.addEventListener('click', ev => {
   toggleFullscreen();
 });
+
+function exitFullscreenHandler() {
+  if (
+    !document.fullscreenElement &&
+    !document.webkitIsFullScreen &&
+    !document.mozFullScreen &&
+    !document.msFullscreenElement
+  ) {
+    player.classList.remove('fullscreen');
+  }
+}
 
 function toggleFullscreen() {
   if (!document.fullscreenElement) {
@@ -270,7 +283,7 @@ function toggleFullscreen() {
       .then(() => {
         player.classList.add('fullscreen');
       })
-      .catch((err) => {
+      .catch(err => {
         alert(`Error attempting to enable full-screen mode: ${err.message} (${err.name})`);
       });
   } else {
@@ -279,17 +292,17 @@ function toggleFullscreen() {
   }
 }
 
-pauseButton.addEventListener('click', (ev) => {
+pauseButton.addEventListener('click', ev => {
   iframe.style.display = 'none';
 });
 
-playButton.addEventListener('click', (ev) => {
+playButton.addEventListener('click', ev => {
   iframe.style.display = 'initial';
 });
 
 // END FLOWICS //
 
-document.getElementById('unmuteButton').onclick = function () {
+document.getElementById('unmuteButton').onclick = function() {
   document.getElementById('myVideoId').muted = false;
   document.getElementById('unmuteButton').style.display = 'none';
   setStatusMessage('');
