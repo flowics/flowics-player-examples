@@ -14,91 +14,88 @@
  * limitations under the License.
  */
 
-var sdk = window["phenix-web-sdk"];
-var isMobileAppleDevice =
-  /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+var sdk = window['phenix-web-sdk'];
+var isMobileAppleDevice = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
 var isOtherMobile = /Android|webOS|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS/i.test(
   navigator.userAgent
 );
 
 // Video element to view channel with
-var videoElement = document.getElementById("myVideoId");
+var videoElement = document.getElementById('myVideoId');
 
 // Alias to be used to publish/create/join channel
-var channelAlias = "heroes";
+var channelAlias = 'heroes';
 
 // Authenticate against our demo backend. Not for production use.
 // See our admin api for more info how to setup your own backend
 // https://phenixrts.com/docs/#admin-api
-var backendUri = "https://demo-integration.phenixrts.com/pcast";
+var backendUri = 'https://demo-integration.phenixrts.com/pcast';
 
 // Features to use with channel
 // If WebRTC is not supported then fall back to live streaming (~10 second latency) with DASH/HLS
-var features = ["real-time", "dash", "hls"];
+var features = ['real-time', 'dash', 'hls'];
 
 var adminApiProxyClient = new sdk.net.AdminApiProxyClient();
 
 adminApiProxyClient.setBackendUri(backendUri);
 adminApiProxyClient.setAuthenticationData({
-  userId: "my-user-id-that-is-NOT-related-to-application-id",
-  password: "my-password-that-is-NOT-related-to-secret"
+  userId: 'my-user-id-that-is-NOT-related-to-application-id',
+  password: 'my-password-that-is-NOT-related-to-secret',
 });
 
 var channelExpressOptions = {
   features: features,
-  adminApiProxyClient: adminApiProxyClient
+  adminApiProxyClient: adminApiProxyClient,
 };
 
 var joinChannelOptions = {
   alias: channelAlias,
   videoElement: videoElement,
   // Select the most recent publisher in the channel
-  streamSelectionStrategy: "most-recent"
+  streamSelectionStrategy: 'most-recent',
   // Alternatively, select one of multiple High-Availability publishers in the channel
   // streamSelectionStrategy: 'high-availability'
 };
 
 // Support customizations
 try {
-  var params = window.location.search.substring(1).split("&");
+  var params = window.location.search.substring(1).split('&');
 
   for (var i = 0; i < params.length; i++) {
-    if (params[i].indexOf("channelAlias=") === 0) {
-      joinChannelOptions.alias = params[i].substring("channelAlias=".length);
+    if (params[i].indexOf('channelAlias=') === 0) {
+      joinChannelOptions.alias = params[i].substring('channelAlias='.length);
     }
 
-    if (params[i].indexOf("backendUri=") === 0) {
-      adminApiProxyClient.setBackendUri(
-        params[i].substring("backendUri=".length)
-      );
+    if (params[i].indexOf('backendUri=') === 0) {
+      adminApiProxyClient.setBackendUri(params[i].substring('backendUri='.length));
     }
 
-    if (params[i].indexOf("features=") === 0) {
-      channelExpressOptions.features = params[i]
-        .substring("features=".length)
-        .split(",");
+    if (params[i].indexOf('features=') === 0) {
+      channelExpressOptions.features = params[i].substring('features='.length).split(',');
     }
 
-    if (params[i] === "treatBackgroundAsOffline") {
+    if (params[i] === 'treatBackgroundAsOffline') {
       channelExpressOptions.treatBackgroundAsOffline = true;
     }
 
-    if (params[i].indexOf("edgeAuthToken=") === 0) {
+    if (params[i].indexOf('edgeAuthToken=') === 0) {
       // Use EdgeAuth token instead  for auth and stream
-      var edgeAuthToken = params[i].substring("edgeAuthToken=".length);
+      var edgeAuthToken = params[i].substring('edgeAuthToken='.length);
 
       channelExpressOptions.authToken = edgeAuthToken;
       joinChannelOptions.streamToken = edgeAuthToken;
 
       channelExpressOptions.adminApiProxyClient = new sdk.net.AdminApiProxyClient();
-      channelExpressOptions.adminApiProxyClient.setRequestHandler(
-        function handleRequestCallback(requestType, data, callback) {
-          // The SDK made a request for a token b/c using of edge token failed.
-          // The default behavior is to return 'unauthorized' which results in the stream being offline.
-          // This should trigger the customer's custom authentication workflow.
-          return callback(null, { status: "unauthorized" });
-        }
-      );
+      channelExpressOptions.adminApiProxyClient.setRequestHandler(function handleRequestCallback(
+        requestType,
+        data,
+        callback
+      ) {
+        // The SDK made a request for a token b/c using of edge token failed.
+        // The default behavior is to return 'unauthorized' which results in the stream being offline.
+        // This should trigger the customer's custom authentication workflow.
+        return callback(null, { status: 'unauthorized' });
+      });
     }
   }
 } catch (e) {
@@ -115,11 +112,10 @@ function joinChannel() {
     joinChannelOptions,
     function joinChannelCallback(error, response) {
       if (error) {
-        console.error("Unable to join channel", error);
+        console.error('Unable to join channel', error);
 
         setUserMessage(
-          "joinChannel()::joinChannelCallback(error, response) returned error=" +
-            error.message
+          'joinChannel()::joinChannelCallback(error, response) returned error=' + error.message
         );
 
         // Handle error
@@ -127,13 +123,13 @@ function joinChannel() {
       }
 
       setUserMessage(
-        "joinChannel()::joinChannelCallback(error, response) returned response.status=" +
+        'joinChannel()::joinChannelCallback(error, response) returned response.status=' +
           response.status
       );
 
-      if (response.status !== "ok") {
+      if (response.status !== 'ok') {
         // Handle error
-        console.warn("Unable to join room, status: " + response.status);
+        console.warn('Unable to join room, status: ' + response.status);
 
         return;
       }
@@ -151,11 +147,10 @@ function joinChannel() {
       disposables.length = 0;
 
       if (error) {
-        console.error("Unable to subscribe to channel", error);
+        console.error('Unable to subscribe to channel', error);
 
         setUserMessage(
-          "joinChannel()::subscriberCallback(error, response) returned error=" +
-            error.message
+          'joinChannel()::subscriberCallback(error, response) returned error=' + error.message
         );
 
         // Handle error
@@ -163,14 +158,14 @@ function joinChannel() {
       }
 
       setUserMessage(
-        "joinChannel()::subscriberCallback(error, response) returned response.status=" +
+        'joinChannel()::subscriberCallback(error, response) returned response.status=' +
           response.status
       );
 
-      if (response.status === "no-stream-playing") {
+      if (response.status === 'no-stream-playing') {
         // Handle no stream playing in channel - Wait for one to start
         return;
-      } else if (response.status !== "ok") {
+      } else if (response.status !== 'ok') {
         // Handle error
         return;
       }
@@ -179,63 +174,61 @@ function joinChannel() {
       if (response.mediaStream) {
         // Do something with mediaStream
         setUserMessage(
-          "joinChannel()::subscriberCallback(error, response) returned response.mediaStream.getStreamId()=" +
+          'joinChannel()::subscriberCallback(error, response) returned response.mediaStream.getStreamId()=' +
             response.mediaStream.getStreamId()
         );
       }
 
       if (response.renderer) {
-        setStatusMessage("Subscribed");
+        setStatusMessage('Subscribed');
 
         disposables.push(
-          response.renderer.on("autoMuted", function handleAutoMuted() {
+          response.renderer.on('autoMuted', function handleAutoMuted() {
             // The browser refused to play video with audio therefore the stream was started muted.
             // Handle this case properly in your UI so that the user can unmute its stream
 
-            setStatusMessage("Video was automatically muted");
+            setStatusMessage('Video was automatically muted');
 
             // Show button to unmute
-            document.getElementById("unmuteButton").style.display = "";
+            document.getElementById('unmuteButton').style.display = '';
           })
         );
 
         disposables.push(
-          response.renderer.on("failedToPlay", function handleFailedToPlay(
-            reason
-          ) {
+          response.renderer.on('failedToPlay', function handleFailedToPlay(reason) {
             // The browser refused to play video even with audio muted.
             // Handle this case properly in your UI so that the user can start their stream.
 
             setStatusMessage('Video failed to play: "' + reason + '"');
 
-            if (isMobileAppleDevice && reason === "failed-to-play") {
+            if (isMobileAppleDevice && reason === 'failed-to-play') {
               // IOS battery saver mode requires user interaction with the <video> to play video
-              videoElement.onplay = function() {
-                setStatusMessage("Video play()");
+              videoElement.onplay = function () {
+                setStatusMessage('Video play()');
                 response.renderer.start(videoElement);
                 videoElement.onplay = null;
               };
             } else {
-              document.getElementById("playButton").onclick = function() {
-                setStatusMessage("User triggered play()");
+              document.getElementById('playButton').onclick = function () {
+                setStatusMessage('User triggered play()');
                 response.renderer.start(videoElement);
-                document.getElementById("playButton").style.display = "none";
+                document.getElementById('playButton').style.display = 'none';
               };
-              document.getElementById("playButton").style.display = "";
+              document.getElementById('playButton').style.display = '';
             }
           })
         );
 
         disposables.push(
-          response.renderer.on("ended", function handleEnded(reason) {
+          response.renderer.on('ended', function handleEnded(reason) {
             setStatusMessage('Video ended: "' + reason + '"');
 
-            document.getElementById("playButton").onclick = function() {
-              setStatusMessage("User triggered play()");
+            document.getElementById('playButton').onclick = function () {
+              setStatusMessage('User triggered play()');
               joinChannel();
-              document.getElementById("playButton").style.display = "none";
+              document.getElementById('playButton').style.display = 'none';
             };
-            document.getElementById("playButton").style.display = "";
+            document.getElementById('playButton').style.display = '';
           })
         );
       }
@@ -244,74 +237,70 @@ function joinChannel() {
 }
 
 function setUserMessage(message) {
-  var userMessageElement = document.getElementById("userMessage");
+  var userMessageElement = document.getElementById('userMessage');
 
   userMessageElement.innerText = message;
 }
 
 function setStatusMessage(message) {
-  var statusMessageElement = document.getElementById("statusMessage");
+  var statusMessageElement = document.getElementById('statusMessage');
 
   statusMessageElement.innerText = message;
 }
 
 // FLOWICS CONFIGS //
 
-const player = document.querySelector("#customPlayer");
-const fsButton = document.querySelector("#fullscreen");
-const iframe = document.querySelector("#flowicsIframe");
-const pauseButton = document.querySelector("#pauseButton");
-const playButton = document.querySelector("#playButton");
+const player = document.querySelector('#customPlayer');
+const fsButton = document.querySelector('#fullscreen');
+const iframe = document.querySelector('#flowicsIframe');
+const pauseButton = document.querySelector('#pauseButton');
+const playButton = document.querySelector('#playButton');
 
-fsButton.addEventListener("click", ev => {
+fsButton.addEventListener('click', (ev) => {
   toggleFullscreen();
 });
 
 function toggleFullscreen() {
   if (!document.fullscreenElement) {
     const requestFullscreen =
-      player.requestFullscreen ||
-      player.webkitRequestFullScreen ||
-      player.mozRequestFullscreen;
+      player.requestFullscreen || player.webkitRequestFullScreen || player.mozRequestFullscreen;
 
     requestFullscreen
       .call(player)
       .then(() => {
-        player.classList.add("fullscreen");
+        player.classList.add('fullscreen');
       })
-      .catch(err => {
-        alert(
-          `Error attempting to enable full-screen mode: ${err.message} (${err.name})`
-        );
+      .catch((err) => {
+        alert(`Error attempting to enable full-screen mode: ${err.message} (${err.name})`);
       });
   } else {
     document.exitFullscreen();
-    player.classList.remove("fullscreen");
+    player.classList.remove('fullscreen');
   }
 }
 
-pauseButton.addEventListener("click", ev => {
-  iframe.style.display = "none";
+pauseButton.addEventListener('click', (ev) => {
+  iframe.style.display = 'none';
 });
 
-playButton.addEventListener("click", ev => {
-  iframe.style.display = "initial";
+playButton.addEventListener('click', (ev) => {
+  iframe.style.display = 'initial';
 });
-
-document.getElementById("unmuteButton").onclick = function() {
-  document.getElementById("myVideoId").muted = false;
-  // document.getElementById("unmuteButton").style.display = "none";
-  setStatusMessage("");
-};
 
 // END FLOWICS //
+
+document.getElementById('unmuteButton').onclick = function () {
+  document.getElementById('myVideoId').muted = false;
+  document.getElementById('unmuteButton').style.display = 'none';
+  setStatusMessage('');
+};
 
 // Mobile devices only support autoplay with WebRTC. In order to autoplay with 'streaming' (not real-time) you need to mute the video element
 if ((isMobileAppleDevice || isOtherMobile) && !sdk.RTC.webrtcSupported) {
   videoElement.muted = true;
 
   // Show button to unmute
-  document.getElementById("unmuteButton").style.display = "";
+  document.getElementById('unmuteButton').style.display = '';
 }
 
 // Join and view the channel
