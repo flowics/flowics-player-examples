@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', function (event) {
   };
   var uiConfig = {
     flowics: {
-      graphicsURL: graphics.fer.dev_buy,
+      graphicsURL: graphics.live_demo,
     },
   };
   var sources = {

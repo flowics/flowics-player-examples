@@ -24,7 +24,11 @@ var isOtherMobile = /Android|webOS|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|
 var videoElement = document.getElementById('myVideoId');
 
 // Alias to be used to publish/create/join channel
-var channelAlias = 'alias';
+var channelAlias = 'REPLACE-WITH-YOUR-ALIAS';
+
+// Flowics Graphics
+var flowicsGraphicsUrl =
+  'https://viz.flowics.com/public/5009db71522e6617e6ef8d4d11709f8a/5ebed4fb606e442ab8aa48a7/live';
 
 // Authenticate against our demo backend. Not for production use.
 // See our admin api for more info how to setup your own backend
@@ -248,11 +252,29 @@ function setStatusMessage(message) {
 
 // FLOWICS CONFIGS //
 
-document.addEventListener('fullscreenchange', exitFullscreenHandler);
+function onGraphicsLoad(flowicsGraphicsOverlay) {
+  console.log('Flowics Overlay: onGraphicsLoad Called');
+
+  // Overrides some texts in the graphics
+  flowicsGraphicsOverlay.setTexts({
+    n8: 'Buy € 9.99',
+    n12: 'Buy € 19.99',
+  });
+  flowicsGraphicsOverlay.show();
+}
+
+var flowicsGraphicsOverlay = new Flowics.GraphicsOverlay({
+  syncGraphics: false,
+  delay: 0,
+  enableEventsNotifier: true,
+  graphicsUrl: flowicsGraphicsUrl,
+  className: `flowics-iframe`,
+  onGraphicsLoad: onGraphicsLoad,
+  domId: 'flowics-graphics',
+});
 
 const player = document.querySelector('#customPlayer');
 const fsButton = document.querySelector('#fullscreen');
-const iframe = document.querySelector('#flowicsIframe');
 const pauseButton = document.querySelector('#pauseButton');
 const playButton = document.querySelector('#playButton');
 const muteToggleButton = document.querySelector('#muteToggleButton');
@@ -283,7 +305,7 @@ function toggleFullscreen() {
         player.classList.add('fullscreen');
       })
       .catch((err) => {
-        alert(`Error attempting to enable full-screen mode: ${err.message} (${err.name})`);
+        console.err(`Error attempting to enable full-screen mode: ${err.message} (${err.name})`);
       });
   } else {
     document.exitFullscreen();
@@ -291,14 +313,16 @@ function toggleFullscreen() {
   }
 }
 
+document.addEventListener('fullscreenchange', exitFullscreenHandler);
+
 pauseButton.addEventListener('click', (ev) => {
   videoElement.pause();
-  iframe.style.display = 'none';
+  flowicsGraphicsOverlay.hide();
 });
 
 playButton.addEventListener('click', (ev) => {
   videoElement.play();
-  iframe.style.display = 'initial';
+  flowicsGraphicsOverlay.show();
 });
 
 // END FLOWICS //

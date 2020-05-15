@@ -6,6 +6,7 @@
     <title>View Channel</title>
     <link rel="stylesheet" href="main.css" />
     <script src="https://dl.phenixrts.com/WebSDK/2020.1.latest/phenix-web-sdk.min.js"></script>
+    <script src="https://viz.flowics.com/public/scripts/graphics-overlay/0.1/sdk.js"></script>
     <script>
       var __phenixPageLoadTime = new Date().getTime();
     </script>
@@ -15,11 +16,7 @@
     <div id="customPlayer" class="custom-player">
       <div class="video-wrapper">
         <video id="myVideoId" class="video-element" autoplay playsinline></video>
-        <iframe
-          id="flowicsIframe"
-          class="flowics-iframe"
-          src="https://viz.flowics.com/public/88e76302345390959725139ec6122a74/5d97e2b51965641b5a54d0b1/live"
-        ></iframe>
+        <div id="flowics-graphics"></div>
       </div>
       <div class="player__control-bar">
         <button id="playButton" class="button"><div class="play"><div></button>

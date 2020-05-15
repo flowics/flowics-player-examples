@@ -28,7 +28,7 @@ body {
   height: 100%;
 }
 
-.flowics-iframe {
+#flowics-graphics {
   position: absolute;
   width: 100%;
   height: 100%;
