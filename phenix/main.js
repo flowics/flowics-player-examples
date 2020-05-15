@@ -24,7 +24,7 @@ var isOtherMobile = /Android|webOS|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|
 var videoElement = document.getElementById('myVideoId');
 
 // Alias to be used to publish/create/join channel
-var channelAlias = 'heroes';
+var channelAlias = 'alias';
 
 // Authenticate against our demo backend. Not for production use.
 // See our admin api for more info how to setup your own backend
@@ -190,7 +190,7 @@ function joinChannel() {
             setStatusMessage('Video was automatically muted');
 
             // Show button to unmute
-            document.getElementById('unmuteButton').style.display = '';
+            document.getElementById('unmuteButton').innerText = 'Unmute';
           })
         );
 
@@ -203,18 +203,16 @@ function joinChannel() {
 
             if (isMobileAppleDevice && reason === 'failed-to-play') {
               // IOS battery saver mode requires user interaction with the <video> to play video
-              videoElement.onplay = function() {
+              videoElement.onplay = function () {
                 setStatusMessage('Video play()');
                 response.renderer.start(videoElement);
                 videoElement.onplay = null;
               };
             } else {
-              document.getElementById('playButton').onclick = function() {
+              document.getElementById('playButton').onclick = function () {
                 setStatusMessage('User triggered play()');
                 response.renderer.start(videoElement);
-                document.getElementById('playButton').style.display = 'none';
               };
-              document.getElementById('playButton').style.display = '';
             }
           })
         );
@@ -223,12 +221,12 @@ function joinChannel() {
           response.renderer.on('ended', function handleEnded(reason) {
             setStatusMessage('Video ended: "' + reason + '"');
 
-            document.getElementById('playButton').onclick = function() {
+            document.getElementById('playButton').onclick = function () {
               setStatusMessage('User triggered play()');
               joinChannel();
-              document.getElementById('playButton').style.display = 'none';
+              // document.getElementById('playButton').style.display = 'none';
             };
-            document.getElementById('playButton').style.display = '';
+            // document.getElementById('playButton').style.display = '';
           })
         );
       }
@@ -257,8 +255,9 @@ const fsButton = document.querySelector('#fullscreen');
 const iframe = document.querySelector('#flowicsIframe');
 const pauseButton = document.querySelector('#pauseButton');
 const playButton = document.querySelector('#playButton');
+const muteToggleButton = document.querySelector('#muteToggleButton');
 
-fsButton.addEventListener('click', ev => {
+fsButton.addEventListener('click', (ev) => {
   toggleFullscreen();
 });
 
@@ -283,7 +282,7 @@ function toggleFullscreen() {
       .then(() => {
         player.classList.add('fullscreen');
       })
-      .catch(err => {
+      .catch((err) => {
         alert(`Error attempting to enable full-screen mode: ${err.message} (${err.name})`);
       });
   } else {
@@ -292,20 +291,22 @@ function toggleFullscreen() {
   }
 }
 
-pauseButton.addEventListener('click', ev => {
+pauseButton.addEventListener('click', (ev) => {
+  videoElement.pause();
   iframe.style.display = 'none';
 });
 
-playButton.addEventListener('click', ev => {
+playButton.addEventListener('click', (ev) => {
+  videoElement.play();
   iframe.style.display = 'initial';
 });
 
 // END FLOWICS //
 
-document.getElementById('unmuteButton').onclick = function() {
-  document.getElementById('myVideoId').muted = false;
-  document.getElementById('unmuteButton').style.display = 'none';
-  setStatusMessage('');
+muteToggleButton.onclick = function () {
+  videoElement.muted = !videoElement.muted;
+  muteToggleButton.innerText = videoElement.muted ? 'Unmute' : 'Mute';
+  // setStatusMessage('');
 };
 
 // Mobile devices only support autoplay with WebRTC. In order to autoplay with 'streaming' (not real-time) you need to mute the video element
@@ -313,7 +314,9 @@ if ((isMobileAppleDevice || isOtherMobile) && !sdk.RTC.webrtcSupported) {
   videoElement.muted = true;
 
   // Show button to unmute
-  document.getElementById('unmuteButton').style.display = '';
+  muteToggleButton.innerText = 'Unmute';
+} else {
+  muteToggleButton.innerText = 'Mute';
 }
 
 // Join and view the channel
