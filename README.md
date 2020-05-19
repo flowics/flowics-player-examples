@@ -1,6 +1,6 @@
 # Flowics Player Integration Examples
 
 ## Demos
-* [**bitmovin**](bitmovin/)
 
-
+- [**bitmovin**](bitmovin/)
+- [**phenix**](phenix/)
