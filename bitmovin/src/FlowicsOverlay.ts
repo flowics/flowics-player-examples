@@ -1,14 +1,9 @@
 /* eslint-disable no-console */
-import { Container, UIManager, UIInstanceManager } from "bitmovin-player-ui";
-import {
-  PlayerEvent,
-  PlayerAPI,
-  PlayerEventBase,
-  TimeChangedEvent,
-} from "bitmovin-player";
-import "./FlowicsOverlay.scss";
-import { DOM } from "bitmovin-player-ui/dist/js/framework/dom";
-import { ContainerConfig } from "bitmovin-player-ui/dist/js/framework/components/container";
+import { Container, UIManager, UIInstanceManager } from 'bitmovin-player-ui';
+import { PlayerEvent, PlayerAPI, PlayerEventBase, TimeChangedEvent } from 'bitmovin-player';
+import './FlowicsOverlay.scss';
+import { DOM } from 'bitmovin-player-ui/dist/js/framework/dom';
+import { ContainerConfig } from 'bitmovin-player-ui/dist/js/framework/components/container';
 
 declare global {
   interface Window {
@@ -41,32 +36,14 @@ export class FlowicsOverlay extends Container<ContainerConfig> {
     this.config = this.mergeConfig(
       config,
       {
-        cssPrefix: "flowics",
-        cssClass: "overlay",
+        cssPrefix: 'flowics',
+        cssClass: 'overlay',
         hidden: true,
         components: [],
       },
       this.config
     );
   }
-
-  buildEventHandler = (
-    eventType: string,
-    player: PlayerAPI,
-    uiManager: UIInstanceManager
-  ) => {
-    switch (eventType) {
-      case "onClick": {
-        console.log("Event Handler: onClick");
-        player.pause();
-      }
-      case "onMouseEnter": {
-        console.log("Event Handler: onMouseEnter");
-      }
-      default:
-        return;
-    }
-  };
 
   configure(player: PlayerAPI, uiManager: UIInstanceManager) {
     // TODO See how to pass this correctly
@@ -78,9 +55,6 @@ export class FlowicsOverlay extends Container<ContainerConfig> {
 
     this.flowicsConfig = uiConfig.flowics;
 
-    const eventHandler = (eventType: string) =>
-      this.buildEventHandler(eventType, player, uiConfig);
-
     this.flowicsGraphicsOverlay = new window.Flowics.GraphicsOverlay({
       syncGraphics: true,
       delay: 0,
@@ -90,7 +64,6 @@ export class FlowicsOverlay extends Container<ContainerConfig> {
       //   "https://viz.flowics.com/public/7f1abbadc05d2db270a52cad6360327b/5ea703b94fa8ca5176941496/live",
       className: `${this.config.cssPrefix}graphicsFrame`,
       onGraphicsLoad: this.onGraphicsLoad,
-      eventHandler,
     });
 
     // TODO handle on video end properly.
@@ -124,18 +97,16 @@ export class FlowicsOverlay extends Container<ContainerConfig> {
     });
 
     player.on(PlayerEvent.TimeChanged, (event: PlayerEventBase) => {
-      this.flowicsGraphicsOverlay.notifyVideoSegment(
-        (event as TimeChangedEvent).time
-      );
+      this.flowicsGraphicsOverlay.notifyVideoSegment((event as TimeChangedEvent).time);
     });
   }
 
   onGraphicsLoad(flowicsGraphicsOverlay: any) {
     // TODO LLevar esto a configuración externa no dentro de este archivo
-    console.log("Flowics Overlay: onGraphicsLoad Called");
+    console.log('Flowics Overlay: onGraphicsLoad Called');
     flowicsGraphicsOverlay.setTexts({
-      n25: "Buy USD 2",
-      n28: "Buy USD 5",
+      n25: 'Buy USD 2',
+      n28: 'Buy USD 5',
     });
     flowicsGraphicsOverlay.show();
   }
@@ -172,14 +143,14 @@ export class FlowicsOverlay extends Container<ContainerConfig> {
   }
 
   toDomElement() {
-    console.log("Flowics Overlay: toDomElement");
-    const mainWrap = new DOM("div", {
+    console.log('Flowics Overlay: toDomElement');
+    const mainWrap = new DOM('div', {
       class: this.getCssClasses(),
     }).css({
-      position: "absolute",
-      width: "100%",
-      height: "100%",
-      zIndex: "1",
+      position: 'absolute',
+      width: '100%',
+      height: '100%',
+      zIndex: '1',
     });
 
     return mainWrap;

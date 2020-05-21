@@ -28,7 +28,7 @@ var channelAlias = 'REPLACE-WITH-YOUR-ALIAS';
 
 // Flowics Graphics
 var flowicsGraphicsUrl =
-  'https://viz.flowics.com/public/5009db71522e6617e6ef8d4d11709f8a/5ebed4fb606e442ab8aa48a7/live';
+  'http://dev.flowics.com:5000/public/8b179a9c2d21b5181dd85a92b58628fc/5ec2eed9e7d7d43f68bdc646/live';
 
 // Authenticate against our demo backend. Not for production use.
 // See our admin api for more info how to setup your own backend
@@ -324,6 +324,13 @@ playButton.addEventListener('click', (ev) => {
   videoElement.play();
   flowicsGraphicsOverlay.show();
 });
+
+const logMessage = (message) => {
+  console.log(message, 'Callback log');
+};
+
+flowicsGraphicsOverlay.on('NodeMessage', logMessage);
+flowicsGraphicsOverlay.off('NodeMessage', logMessage);
 
 // END FLOWICS //
 
