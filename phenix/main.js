@@ -28,7 +28,7 @@ var channelAlias = 'REPLACE-WITH-YOUR-ALIAS';
 
 // Flowics Graphics
 var flowicsGraphicsUrl =
-  'http://dev.flowics.com:5000/public/8b179a9c2d21b5181dd85a92b58628fc/5ec2eed9e7d7d43f68bdc646/live';
+  'https://viz.flowics.com/public/5009db71522e6617e6ef8d4d11709f8a/5ebed4fb606e442ab8aa48a7/live';
 
 // Authenticate against our demo backend. Not for production use.
 // See our admin api for more info how to setup your own backend
@@ -266,12 +266,67 @@ function onGraphicsLoad(flowicsGraphicsOverlay) {
 var flowicsGraphicsOverlay = new Flowics.GraphicsOverlay({
   syncGraphics: false,
   delay: 0,
-  enableEventsNotifier: true,
   graphicsUrl: flowicsGraphicsUrl,
   className: `flowics-iframe`,
   onGraphicsLoad: onGraphicsLoad,
   domId: 'flowics-graphics',
 });
+
+/*
+ * Listening to `NodeMessage` events.
+ *
+ * A `NodeMessage` event is sent when a Node (Text, Container, Image) from the
+ * Graphics is configured to trigger a `Send Message` action as a result of
+ * a user action (for ex. click/tap on the node).
+ * When defining a `Send Message` action, the graphics author configures the message to be sent.
+ * This message is a string.
+ * You can send for example a plain text message or a serialized JSON.
+ * It's important that the receiving app handles the messages accordingly to how they are
+ * configured.
+ *
+ * `NodeMessage` events have the following interface
+ *
+ *   interface NodeMessageEvent {
+ *     type: 'NodeMessage';
+ *     message: string;
+ *   }
+ *
+ *   An example event transporting the `Hello world` plain text is
+ *   {
+ *     type: 'NodeMessage',
+ *     message: 'Hello world'
+ *   }
+ *
+ *   An example event transporting a serialized JSON is
+ *   {
+ *     type: 'NodeMessage',
+ *     message: '{"type": "buy", "product": "A0001"}'
+ *   }
+ *
+ *  To be able to get these messages a listener can be registered as shown in the following code
+ *  showing how a serialized JSON that is sent from the graphics can be handled.
+ */
+
+const parseAndLogNodeMessage = (event) => {
+  try {
+    console.log('Parsed Message', JSON.parse(event.message));
+  } catch (e) {
+    console.error('Failed to Parse Message as JSON. Event: ', event);
+  }
+};
+
+const logEvent = (eventType) => (event) => {
+  console.log(eventType, event);
+};
+const logNodeMessage = logEvent('NodeMessage');
+
+flowicsGraphicsOverlay.on('NodeMessage', logNodeMessage);
+flowicsGraphicsOverlay.on('NodeMessage', parseAndLogNodeMessage);
+/* To deregister the listener the `off` method can be used
+ *
+ * flowicsGraphicsOverlay.off('NodeMessage', logNodeMessage);
+ * flowicsGraphicsOverlay.off('NodeMessage', parseAndLogNodeMessage);
+ */
 
 const player = document.querySelector('#customPlayer');
 const fsButton = document.querySelector('#fullscreen');
@@ -324,13 +379,6 @@ playButton.addEventListener('click', (ev) => {
   videoElement.play();
   flowicsGraphicsOverlay.show();
 });
-
-const logMessage = (message) => {
-  console.log(message, 'Callback log');
-};
-
-flowicsGraphicsOverlay.on('NodeMessage', logMessage);
-flowicsGraphicsOverlay.off('NodeMessage', logMessage);
 
 // END FLOWICS //
 
