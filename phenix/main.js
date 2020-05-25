@@ -28,7 +28,8 @@ var channelAlias = 'REPLACE-WITH-YOUR-ALIAS';
 
 // Flowics Graphics
 var flowicsGraphicsUrl =
-  'https://viz.flowics.com/public/5009db71522e6617e6ef8d4d11709f8a/5ebed4fb606e442ab8aa48a7/live';
+  // 'https://viz.flowics.com/public/5009db71522e6617e6ef8d4d11709f8a/5ebed4fb606e442ab8aa48a7/live';
+  "https://viz.flowics.com/public/b3ece529f435dbd10da611efb8733186/5eb1bd06095eee3e40555ba1/live?profile=player";
 
 // Authenticate against our demo backend. Not for production use.
 // See our admin api for more info how to setup your own backend
@@ -350,22 +351,29 @@ function exitFullscreenHandler() {
 }
 
 function toggleFullscreen() {
-  if (!document.fullscreenElement) {
-    const requestFullscreen =
+  const requestFullscreen =
       player.requestFullscreen || player.webkitRequestFullScreen || player.mozRequestFullscreen;
 
-    requestFullscreen
-      .call(player)
-      .then(() => {
-        player.classList.add('fullscreen');
-      })
-      .catch((err) => {
-        console.err(`Error attempting to enable full-screen mode: ${err.message} (${err.name})`);
-      });
+  if(requestFullscreen) {
+    if (!document.fullscreenElement) {
+
+
+      requestFullscreen
+        .call(player)
+        .then(() => {
+          player.classList.add('fullscreen');
+        })
+        .catch((err) => {
+          console.err(`Error attempting to enable full-screen mode: ${err.message} (${err.name})`);
+        });
+    } else {
+      document.exitFullscreen();
+      player.classList.remove('fullscreen');
+    }
   } else {
-    document.exitFullscreen();
-    player.classList.remove('fullscreen');
+    // Manually make fullscreen
   }
+
 }
 
 document.addEventListener('fullscreenchange', exitFullscreenHandler);
