@@ -29,6 +29,31 @@ body {
   height: 100%;
 }
 
+/* fakeFS for iPhone */
+.custom-player.iph-fs {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  z-index: 99999;
+  background: #000;
+}
+
+.custom-player.iph-fs .video-wrapper,
+.custom-player.iph-fs .player__control-bar {
+  width: 100%;
+}
+
+.custom-player.iph-fs .video-element {
+  height: 100%;
+}
+
 #flowics-graphics {
   position: absolute;
   width: 100%;
