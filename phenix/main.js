@@ -354,7 +354,7 @@ function toggleFullscreen() {
   const requestFullscreen =
     player.requestFullscreen || player.webkitRequestFullScreen || player.mozRequestFullscreen;
 
-  if (requestFullscreen) {
+  if (!requestFullscreen) {
     if (!document.fullscreenElement) {
       requestFullscreen
         .call(player)

@@ -50,6 +50,11 @@ body {
   width: 100%;
 }
 
+.custom-player.iph-fs .video-wrapper {
+  display: flex;
+  align-items: center;
+}
+
 .custom-player.iph-fs .video-element {
   height: 100%;
 }
