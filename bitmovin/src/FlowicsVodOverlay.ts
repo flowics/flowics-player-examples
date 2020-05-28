@@ -4,6 +4,7 @@ import { PlayerEvent, PlayerAPI, PlayerEventBase, TimeChangedEvent } from 'bitmo
 import './FlowicsOverlay.scss';
 import { DOM } from 'bitmovin-player-ui/dist/js/framework/dom';
 import { ContainerConfig } from 'bitmovin-player-ui/dist/js/framework/components/container';
+import { FlowicsGraphicsConfig, VODFlowicsGraphicsConfig } from './VideoUI';
 
 declare global {
   interface Window {
@@ -11,30 +12,21 @@ declare global {
   }
 }
 
-type FlowicsConfig = {
-  graphicsURL: string | null;
-};
 
-export class FlowicsOverlay extends Container<ContainerConfig> {
-  private flowicsConfig: FlowicsConfig = {
-    graphicsURL: null,
-  };
-
+export class FlowicsVodOverlay extends Container<ContainerConfig> {
+  private graphicsConfig: VODFlowicsGraphicsConfig;
   private flowicsGraphicsOverlay: any;
-
-  private eventHandler: any;
+  private player: PlayerAPI | null = null;
 
   private iFrameInitialized: boolean = false;
-  constructor(config = {}) {
-    super(config);
+  constructor(graphicsConfig: VODFlowicsGraphicsConfig, containerConfig: ContainerConfig = {}) {
+    super(containerConfig);
 
-    this.flowicsConfig = {
-      graphicsURL: null,
-    };
+    this.graphicsConfig = graphicsConfig;
     this.iFrameInitialized = false;
 
     this.config = this.mergeConfig(
-      config,
+      containerConfig,
       {
         cssPrefix: 'flowics',
         cssClass: 'overlay',
@@ -45,35 +37,41 @@ export class FlowicsOverlay extends Container<ContainerConfig> {
     );
   }
 
+
   configure(player: PlayerAPI, uiManager: UIInstanceManager) {
-    // TODO See how to pass this correctly
-    const uiConfig: any = uiManager.getConfig();
-
-    if (!uiConfig.flowics) {
-      console.error('UIConfig does not have property "flowics".');
-    }
-
-    this.flowicsConfig = uiConfig.flowics;
-
+    this.player = player;
     this.flowicsGraphicsOverlay = new window.Flowics.GraphicsOverlay({
-      syncGraphics: true,
-      delay: 0,
-      enableEventsNotifier: true,
-      graphicsUrl: this.flowicsConfig.graphicsURL,
-      // graphicsURL:
-      //   "https://viz.flowics.com/public/7f1abbadc05d2db270a52cad6360327b/5ea703b94fa8ca5176941496/live",
+      sync: {
+        mode: window.Flowics.GraphicsOverlay.SyncMode.VideoTime,
+        track: this.graphicsConfig.track
+      },
+      delay: this.graphicsConfig.delay ? this.graphicsConfig.delay : 0,
+      graphicsUrl: this.graphicsConfig.graphicsURL,
       className: `${this.config.cssPrefix}graphicsFrame`,
-      onGraphicsLoad: this.onGraphicsLoad,
+      onGraphicsLoad: this.onGraphicsLoad.bind(this)
     });
+
+    const parseAndLogNodeMessage = (event: any) => {
+      try {
+        console.log('Parsed Message', JSON.parse(event.message));
+      } catch (e) {
+        console.error('Failed to Parse Message as JSON. Event: ', event);
+      }
+    };
+
+    const logEvent = (eventType: any) => (event: any) => {
+      console.log(eventType, event);
+    };
+    const logNodeMessage = logEvent('NodeMessage');
+
+    this.flowicsGraphicsOverlay.on('NodeMessage', logNodeMessage);
+    this.flowicsGraphicsOverlay.on('NodeMessage', parseAndLogNodeMessage);
+
 
     // TODO handle on video end properly.
 
     player.on(PlayerEvent.Playing, (event: PlayerEventBase) => {
-      this.showOverlayIfNeeded(player);
-    });
-
-    player.on(PlayerEvent.Paused, (event: PlayerEventBase) => {
-      this.hide();
+      this.showGraphics();
     });
 
     player.on(PlayerEvent.StallStarted, (event: PlayerEventBase) => {
@@ -81,29 +79,33 @@ export class FlowicsOverlay extends Container<ContainerConfig> {
     });
 
     player.on(PlayerEvent.StallEnded, (event: PlayerEventBase) => {
-      this.showOverlayIfNeeded(player);
+      this.showGraphics();
     });
 
     player.on(PlayerEvent.PlaybackFinished, (event: PlayerEventBase) => {
       this.hide();
     });
 
-    player.on(PlayerEvent.TimeShift, (event: PlayerEventBase) => {
-      this.hide();
-    });
+    // player.on(PlayerEvent.TimeShift, (event: PlayerEventBase) => {
+    //   this.hide();
+    // });
 
-    player.on(PlayerEvent.TimeShifted, () => {
-      this.showOverlayIfNeeded(player);
-    });
+    // player.on(PlayerEvent.TimeShifted, () => {
+    //   this.showOverlayIfNeeded(player);
+    // });
 
-    player.on(PlayerEvent.TimeChanged, (event: PlayerEventBase) => {
-      this.flowicsGraphicsOverlay.notifyVideoSegment((event as TimeChangedEvent).time);
-    });
+
   }
 
   onGraphicsLoad(flowicsGraphicsOverlay: any) {
     // TODO LLevar esto a configuración externa no dentro de este archivo
-    console.log('Flowics Overlay: onGraphicsLoad Called');
+    console.log('Flowics Overlay: Graphics Initialized');
+
+    this.player!.on(PlayerEvent.TimeChanged, (event: PlayerEventBase) => {
+      // console.log('Sending Time Changed', (event as TimeChangedEvent).time)
+      this.flowicsGraphicsOverlay.notifyVideoEvent({ type: "TimeChanged", time: (event as TimeChangedEvent).time });
+    });
+
     flowicsGraphicsOverlay.setTexts({
       n25: 'Buy USD 2',
       n28: 'Buy USD 5',
@@ -111,19 +113,7 @@ export class FlowicsOverlay extends Container<ContainerConfig> {
     flowicsGraphicsOverlay.show();
   }
 
-  showOverlayIfNeeded(player: PlayerAPI) {
-    if (player.isLive()) {
-      // if (player.getTimeShift() === 0) {
-      this.showOverlay();
-      // } else {
-      // this.hide();
-      // }
-    } else {
-      this.showOverlay();
-    }
-  }
-
-  showOverlay() {
+  showGraphics() {
     this.renderIFrameMaybe();
     this.show();
   }

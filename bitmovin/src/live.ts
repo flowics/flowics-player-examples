@@ -31,12 +31,8 @@ document.addEventListener('DOMContentLoaded', function (event) {
     live_demo:
       'https://viz.flowics.com/public/88e76302345390959725139ec6122a74/5d97e2b51965641b5a54d0b1/live',
   };
-  var uiConfig = {
-    flowics: {
-      graphicsURL: graphics.live_demo,
-    },
-  };
-  var sources = {
+
+  const sources = {
     vod: {
       parkour: {
         hls:
@@ -65,7 +61,7 @@ document.addEventListener('DOMContentLoaded', function (event) {
   var container = document.getElementById('bitmovin-player');
   if (container) {
     const player = new Player(container, config);
-    const uiInstance = buildFlowicsUI(player, uiConfig);
+    const uiInstance = buildFlowicsUI(player, { type: "live", graphicsURL: graphics.live_demo });
 
     player.load(sources.live.cnn).then(
       function () {

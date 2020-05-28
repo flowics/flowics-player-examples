@@ -38,11 +38,28 @@ import {
   PictureInPictureToggleButton,
   Component,
 } from 'bitmovin-player-ui';
-import { FlowicsOverlay } from './FlowicsOverlay';
+import { FlowicsLiveOverlay } from './FlowicsLiveOverlay';
 import { UIConditionContext } from 'bitmovin-player-ui/dist/js/framework/uimanager';
 import { i18n } from 'bitmovin-player-ui/dist/js/framework/localization/i18n';
+import { FlowicsVodOverlay } from './FlowicsVodOverlay';
 
-export function flowicsSmallScreenUI() {
+interface BaseFlowicsGraphicsConfig {
+  graphicsURL: string;
+  delay?: number;
+}
+
+export interface VODFlowicsGraphicsConfig extends BaseFlowicsGraphicsConfig {
+  type: 'vod';
+  track: string;
+}
+
+export interface LiveFlowicsGraphicsConfig extends BaseFlowicsGraphicsConfig {
+  type: 'live'
+}
+
+export type FlowicsGraphicsConfig = LiveFlowicsGraphicsConfig | VODFlowicsGraphicsConfig;
+
+export function flowicsSmallScreenUI(flowicsGraphicsConfig: FlowicsGraphicsConfig) {
   let mainSettingsPanelPage = new SettingsPanelPage({
     components: [
       new SettingsPanelItem(
@@ -95,7 +112,7 @@ export function flowicsSmallScreenUI() {
         ],
       }),
       // settingsPanel,
-      new FlowicsOverlay(),
+      (flowicsGraphicsConfig.type == 'live') ? new FlowicsLiveOverlay(flowicsGraphicsConfig) : new FlowicsVodOverlay(flowicsGraphicsConfig),
       new ErrorMessageOverlay(),
       controlBar,
     ],
@@ -111,7 +128,7 @@ export function flowicsSmallScreenUI() {
   return uiCont;
 }
 
-export function flowicsUI() {
+export function flowicsUI(flowicsGraphicsConfig: FlowicsGraphicsConfig) {
   const controlBar = new ControlBar({
     components: [
       new Container({
@@ -146,7 +163,7 @@ export function flowicsUI() {
       new BufferingOverlay(),
       // If no overlay is present, the UI does not react
       // properly. Is a known issue: https://github.com/bitmovin/bitmovin-player-ui/pull/220
-      new FlowicsOverlay(),
+      (flowicsGraphicsConfig.type == 'live') ? new FlowicsLiveOverlay(flowicsGraphicsConfig) : new FlowicsVodOverlay(flowicsGraphicsConfig),
       controlBar,
       new ErrorMessageOverlay(),
     ],
@@ -161,7 +178,10 @@ export function flowicsUI() {
   return uiCont;
 }
 
-export function buildFlowicsUI(player: PlayerAPI, config: UIConfig = {}): UIManager {
+
+
+
+export function buildFlowicsUI(player: PlayerAPI, flowicsGraphicsConfig: FlowicsGraphicsConfig, uiManagerConfig: UIConfig = {}): UIManager {
   // show smallScreen UI only on mobile/handheld devices
   let smallScreenSwitchWidth = 600;
 
@@ -169,7 +189,7 @@ export function buildFlowicsUI(player: PlayerAPI, config: UIConfig = {}): UIMana
     player,
     [
       {
-        ui: flowicsSmallScreenUI(),
+        ui: flowicsSmallScreenUI(flowicsGraphicsConfig),
         condition: (context: UIConditionContext) => {
           return (
             !context.isAd &&
@@ -180,9 +200,9 @@ export function buildFlowicsUI(player: PlayerAPI, config: UIConfig = {}): UIMana
         },
       },
       {
-        ui: flowicsUI(),
+        ui: flowicsUI(flowicsGraphicsConfig),
       },
     ],
-    config
+    uiManagerConfig
   );
 }
