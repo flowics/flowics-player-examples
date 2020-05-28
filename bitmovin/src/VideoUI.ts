@@ -188,19 +188,19 @@ export function buildFlowicsUI(player: PlayerAPI, flowicsGraphicsConfig: Flowics
   return new UIManager(
     player,
     [
+      // {
+      //   ui: flowicsSmallScreenUI(flowicsGraphicsConfig),
+      //   condition: (context: UIConditionContext) => {
+      //     return (
+      //       !context.isAd &&
+      //       !context.adRequiresUi &&
+      //       context.isMobile &&
+      //       context.documentWidth < smallScreenSwitchWidth
+      //     );
+      //   },
+      // },
       {
         ui: flowicsSmallScreenUI(flowicsGraphicsConfig),
-        condition: (context: UIConditionContext) => {
-          return (
-            !context.isAd &&
-            !context.adRequiresUi &&
-            context.isMobile &&
-            context.documentWidth < smallScreenSwitchWidth
-          );
-        },
-      },
-      {
-        ui: flowicsUI(flowicsGraphicsConfig),
       },
     ],
     uiManagerConfig
