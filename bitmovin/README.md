@@ -9,4 +9,4 @@ $ npm install
 $ npm run start
 ```
 
-Access http://localhost:1234.
+Access http://localhost:1234/live.html or http://localhost:1234/vod.html.
