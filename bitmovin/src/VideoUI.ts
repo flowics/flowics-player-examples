@@ -37,11 +37,17 @@ import {
   VRToggleButton,
   PictureInPictureToggleButton,
   Component,
+  SubtitleOverlay,
+  SubtitleSettingsPanelPage,
+  SettingsPanelPageOpenButton,
+  SubtitleSelectBox,
+  SubtitleSettingsLabel
 } from 'bitmovin-player-ui';
 import { FlowicsLiveOverlay } from './FlowicsLiveOverlay';
 import { UIConditionContext } from 'bitmovin-player-ui/dist/js/framework/uimanager';
 import { i18n } from 'bitmovin-player-ui/dist/js/framework/localization/i18n';
 import { FlowicsVodOverlay } from './FlowicsVodOverlay';
+import "./styles.css";
 
 interface BaseFlowicsGraphicsConfig {
   graphicsURL: string;
@@ -60,6 +66,8 @@ export interface LiveFlowicsGraphicsConfig extends BaseFlowicsGraphicsConfig {
 export type FlowicsGraphicsConfig = LiveFlowicsGraphicsConfig | VODFlowicsGraphicsConfig;
 
 export function flowicsSmallScreenUI(flowicsGraphicsConfig: FlowicsGraphicsConfig) {
+  let subtitleOverlay = new SubtitleOverlay();
+
   let mainSettingsPanelPage = new SettingsPanelPage({
     components: [
       new SettingsPanelItem(
@@ -82,7 +90,35 @@ export function flowicsSmallScreenUI(flowicsGraphicsConfig: FlowicsGraphicsConfi
     hideDelay: -1,
   });
 
+  let subtitleSettingsPanelPage = new SubtitleSettingsPanelPage({
+    settingsPanel: settingsPanel,
+    overlay: subtitleOverlay,
+  });
+
+  let subtitleSettingsOpenButton = new SettingsPanelPageOpenButton({
+    targetPage: subtitleSettingsPanelPage,
+    container: settingsPanel,
+    ariaLabel: i18n.getLocalizer('settings.subtitles'),
+    text: i18n.getLocalizer('open'),
+  });
+
+  const subtitleSelectBox = new SubtitleSelectBox();
+  mainSettingsPanelPage.addComponent(
+    new SettingsPanelItem(
+      new SubtitleSettingsLabel({
+        text: i18n.getLocalizer('settings.subtitles'),
+        opener: subtitleSettingsOpenButton,
+      }),
+      subtitleSelectBox,
+      {
+        role: 'menubar',
+      },
+    ));
+
+  settingsPanel.addComponent(subtitleSettingsPanelPage);
+
   settingsPanel.addComponent(new CloseButton({ target: settingsPanel }));
+  subtitleSettingsPanelPage.addComponent(new CloseButton({ target: settingsPanel }));
 
   let controlBar = new ControlBar({
     components: [
@@ -102,16 +138,18 @@ export function flowicsSmallScreenUI(flowicsGraphicsConfig: FlowicsGraphicsConfi
 
   const uiCont = new UIContainer({
     components: [
+      subtitleOverlay,
       new BufferingOverlay(),
       new CastStatusOverlay(),
       new TitleBar({
         components: [
           new MetadataLabel({ content: MetadataLabelContent.Title }),
-          new VolumeToggleButton(), // new SettingsToggleButton({ settingsPanel: settingsPanel }),
+          new VolumeToggleButton(),
+          new SettingsToggleButton({ settingsPanel: settingsPanel }),
           new FullscreenToggleButton(),
         ],
       }),
-      // settingsPanel,
+      settingsPanel,
       (flowicsGraphicsConfig.type == 'live') ? new FlowicsLiveOverlay(flowicsGraphicsConfig) : new FlowicsVodOverlay(flowicsGraphicsConfig),
       new ErrorMessageOverlay(),
       controlBar,

@@ -54,9 +54,28 @@ document.addEventListener('DOMContentLoaded', function (event) {
     const track = 'https://gist.githubusercontent.com/fzunino/366d5fc9a822c5a53386b4937f2dc6ee/raw/46390343b29eda1b24224e5a2f829bef9568e20a/tommy-live-pilot-graphics.json';
     const uiInstance = buildFlowicsUI(player, { type: "vod", track, graphicsURL: graphics.vod_tommy_prod, delay: -1000 });
 
+
+
     player.load(sources.vod.tommy).then(
       function () {
         console.log('Successfully created Bitmovin Player instance');
+        const enSubtitle = {
+          id: "sub1",
+          lang: "en",
+          label: "English",
+          url: "https://gist.githubusercontent.com/fzunino/d5d5fcac7ddbc375c2ab2e358c504274/raw/169e487573b0d6fa503956c97915c733d13120b7/example-subs-en.vtt",
+          kind: "subtitle"
+        };
+        const esSubtitle = {
+          id: "sub2",
+          lang: "es",
+          label: "Español",
+          url: "https://gist.githubusercontent.com/fzunino/d5d5fcac7ddbc375c2ab2e358c504274/raw/169e487573b0d6fa503956c97915c733d13120b7/example-subs-es.vtt",
+          kind: "subtitle"
+        };
+        player.subtitles.add(enSubtitle);
+        player.subtitles.add(esSubtitle);
+
       },
       function (reason) {
         console.log('Error while creating Bitmovin Player instance');
