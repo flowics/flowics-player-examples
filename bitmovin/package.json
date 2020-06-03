@@ -4,8 +4,8 @@
   "description": "JavaScript and TypeScript example starter project",
   "main": "index.html",
   "scripts": {
-    "start": "parcel index.html vod.html --open",
-    "build": "parcel build index.html vod.html"
+    "start": "parcel live.html vod.html --open",
+    "build": "parcel build live.html vod.html"
   },
   "dependencies": {
     "bitmovin-player": "8.34.0",

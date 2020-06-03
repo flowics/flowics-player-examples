@@ -37,6 +37,35 @@ document.addEventListener('DOMContentLoaded', function (event) {
   };
   var sources = {
     vod: {
+      fullyFeatured: {
+        dash: '//bitdash-a.akamaihd.net/content/sintel/sintel.mpd',
+        hls: '//bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8',
+        progressive: [
+          { url: '//bitdash-a.akamaihd.net/content/sintel/Sintel.mp4', type: 'video/mp4' },
+          { url: '//bitdash-a.akamaihd.net/content/sintel/Sintel.webm', type: 'video/webm' }
+        ],
+        poster: '//bitdash-a.akamaihd.net/content/sintel/poster.png',
+        thumbnailTrack: {
+          url: '//bitdash-a.akamaihd.net/content/sintel/sprite/sprite.vtt',
+        },
+        title: 'Sintel',
+        description: 'A woman, Sintel, is attacked while traveling through a wintry mountainside. After defeating her attacker and taking his spear, she finds refuge in a shaman\'s hut...',
+        markers: [
+          { time: 0, title: 'Intro' },
+          { time: 102, title: 'Old Guy', duration: 30 },
+          { time: 150, title: 'City', cssClasses: ['class1', 'class2'] },
+          { time: 200, title: 'Dragon' },
+          { time: 370, title: 'Desert' },
+          { time: 385, title: 'Bamboo Forest' },
+          { time: 410, title: 'Winter again' },
+          { time: 755, title: 'Credits' },
+        ],
+        recommendations: [
+          { title: 'Recommendation 1: The best video ever', url: 'http://bitmovin.com', thumbnail: 'http://placehold.it/300x300', duration: 10.4 },
+          { title: 'Recommendation 2: The second best video', url: 'http://bitmovin.com', thumbnail: 'http://placehold.it/300x300', duration: 64 },
+          { title: 'Recommendation 3: The third best video of all time', url: 'http://bitmovin.com', thumbnail: 'http://placehold.it/300x300', duration: 195 },
+        ],
+      },
       parkour: {
         hls:
           'https://bitdash-a.akamaihd.net/content/MI201109210084_1/m3u8s/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.m3u8',
