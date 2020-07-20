@@ -4,7 +4,7 @@ import 'bitmovin-player/bitmovinplayer-ui.css';
 import './styles.css';
 import { buildFlowicsUI } from './VideoUI';
 import { UIFactory } from 'bitmovin-player-ui';
-import { GRAPHICS, SOURCES, KEYS } from './constants';
+import { SOURCES, GRAPHICS, KEYS } from './constants';
 
 const Flowics = {};
 
@@ -23,9 +23,9 @@ document.addEventListener('DOMContentLoaded', function (event) {
   var container = document.getElementById('bitmovin-player');
   if (container) {
     const player = new Player(container, config);
-    const uiInstance = buildFlowicsUI(player, { type: "live", syncGraphics: true, graphicsURL: GRAPHICS.live_demo });
+    const uiInstance = buildFlowicsUI(player, { type: "live", syncGraphics: false, graphicsURL: GRAPHICS.live_demo });
 
-    player.load(SOURCES.live.cnn).then(
+    player.load(SOURCES.vod.parkour).then(
       function () {
         console.log('Successfully created Bitmovin Player instance');
       },
@@ -33,16 +33,5 @@ document.addEventListener('DOMContentLoaded', function (event) {
         console.log('Error while creating Bitmovin Player instance');
       }
     );
-
-    player.on(PlayerEvent.TimeChanged, (event) => {
-      document.getElementById('timestamp')!.innerText = new Date(event.timestamp).toString();
-      document.getElementById('time')!.innerText = new Date(
-        (event as TimeChangedEvent).time * 1000
-      ).toString();
-      document.getElementById('delay')!.innerText = (
-        event.timestamp -
-        (event as TimeChangedEvent).time * 1000
-      ).toString();
-    });
   }
 });

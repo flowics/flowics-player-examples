@@ -40,7 +40,7 @@ export class FlowicsLiveOverlay extends Container<ContainerConfig> {
 
   configure(player: PlayerAPI, uiManager: UIInstanceManager) {
     this.flowicsGraphicsOverlay = new window.Flowics.GraphicsOverlay({
-      syncGraphics: true,
+      syncGraphics: this.flowicsConfig.syncGraphics,
       delay: 0,
       enableEventsNotifier: true,
       graphicsUrl: this.flowicsConfig.graphicsURL,

@@ -60,7 +60,8 @@ export interface VODFlowicsGraphicsConfig extends BaseFlowicsGraphicsConfig {
 }
 
 export interface LiveFlowicsGraphicsConfig extends BaseFlowicsGraphicsConfig {
-  type: 'live'
+  type: 'live',
+  syncGraphics: boolean
 }
 
 export type FlowicsGraphicsConfig = LiveFlowicsGraphicsConfig | VODFlowicsGraphicsConfig;

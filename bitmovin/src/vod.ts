@@ -4,12 +4,13 @@ import 'bitmovin-player/bitmovinplayer-ui.css';
 import './styles.css';
 import { buildFlowicsUI } from './VideoUI';
 import { UIFactory } from 'bitmovin-player-ui';
+import { KEYS } from './constants';
 
 const Flowics = {};
 
 document.addEventListener('DOMContentLoaded', function (event) {
   var config: PlayerConfig = {
-    key: 'REPLACE-WITH-YOUR-KEY',
+    key: KEYS.bitmovin,
     playback: {
       playsInline: true,
       autoplay: true,
