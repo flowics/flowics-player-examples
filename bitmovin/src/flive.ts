@@ -5,6 +5,7 @@ import './styles.css';
 import { buildFlowicsUI } from './VideoUI';
 import { UIFactory } from 'bitmovin-player-ui';
 import { SOURCES, GRAPHICS, KEYS } from './constants';
+import { getGraphicsUrl } from './util';
 
 const Flowics = {};
 
@@ -23,7 +24,7 @@ document.addEventListener('DOMContentLoaded', function (event) {
   var container = document.getElementById('bitmovin-player');
   if (container) {
     const player = new Player(container, config);
-    const uiInstance = buildFlowicsUI(player, { type: "live", syncGraphics: false, graphicsURL: GRAPHICS.live_demo });
+    const uiInstance = buildFlowicsUI(player, { type: "live", syncGraphics: false, graphicsURL: getGraphicsUrl() || GRAPHICS.live_demo });
 
     player.load(SOURCES.vod.parkour).then(
       function () {

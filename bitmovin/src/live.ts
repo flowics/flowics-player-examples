@@ -5,6 +5,7 @@ import './styles.css';
 import { buildFlowicsUI } from './VideoUI';
 import { UIFactory } from 'bitmovin-player-ui';
 import { GRAPHICS, SOURCES, KEYS } from './constants';
+import { getGraphicsUrl } from './util';
 
 const Flowics = {};
 
@@ -23,7 +24,7 @@ document.addEventListener('DOMContentLoaded', function (event) {
   var container = document.getElementById('bitmovin-player');
   if (container) {
     const player = new Player(container, config);
-    const uiInstance = buildFlowicsUI(player, { type: "live", syncGraphics: true, graphicsURL: GRAPHICS.live_demo });
+    const uiInstance = buildFlowicsUI(player, { type: "live", syncGraphics: true, graphicsURL: getGraphicsUrl() || GRAPHICS.live_demo });
 
     player.load(SOURCES.live.cnn).then(
       function () {
