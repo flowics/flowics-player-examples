@@ -20,13 +20,16 @@ document.addEventListener('DOMContentLoaded', function (event) {
     ui: false,
   };
 
-
   var container = document.getElementById('bitmovin-player');
   if (container) {
     const player = new Player(container, config);
-    const uiInstance = buildFlowicsUI(player, { type: "live", syncGraphics: false, graphicsURL: getGraphicsUrl() || GRAPHICS.live_demo });
+    const uiInstance = buildFlowicsUI(player, {
+      type: 'live',
+      syncGraphics: false,
+      graphicsURL: getGraphicsUrl() || GRAPHICS.live_demo,
+    });
 
-    player.load(SOURCES.vod.parkour).then(
+    player.load(SOURCES.vod.premier).then(
       function () {
         console.log('Successfully created Bitmovin Player instance');
       },

@@ -24,6 +24,11 @@ export const SOURCES = {
         'https://bitdash-a.akamaihd.net/content/MI201109210084_1/m3u8s/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.m3u8',
       poster: 'https://bitdash-a.akamaihd.net/content/MI201109210084_1/poster.jpg',
     },
+    premier: {
+      hls:
+        'https://flowics-pruebas.s3-us-west-2.amazonaws.com/vod/livars3-1-edit2/livars3-1-edit2.m3u8',
+      poster: 'https://flowics-pruebas.s3-us-west-2.amazonaws.com/vod/livars3-1-edit2/premier-league-logo-fullhd.png',
+    },
   },
   live: {
     wowza: {
@@ -38,7 +43,7 @@ export const SOURCES = {
       webinar: {
         hls: 'https://cdn3.wowza.com/1/OUdza3A1S1YwZE1W/emQxbnNo/hls/live/playlist.m3u8',
         poster: 'https://bitdash-a.akamaihd.net/content/MI201109210084_1/poster.jpg',
-      }
+      },
     },
     cnn: {
       dash: 'http://demo-dash-live.zahs.tv/hd/manifest.mpd?timeshift=100',
