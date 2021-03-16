@@ -1,5 +1,5 @@
 export const KEYS = {
-  bitmovin: 'REPlACE-WITH-YOUR-KEY'
+  bitmovin: 'REPlACE-WITH-YOUR-KEY',
 };
 
 export const GRAPHICS = {
@@ -26,8 +26,10 @@ export const SOURCES = {
     },
     premier: {
       hls:
-        'https://flowics-pruebas.s3-us-west-2.amazonaws.com/vod/livars3-1-edit2/livars3-1-edit2.m3u8',
-      poster: 'https://flowics-pruebas.s3-us-west-2.amazonaws.com/vod/livars3-1-edit2/premier-league-logo-fullhd.png',
+        // 'https://flowics-pruebas.s3-us-west-2.amazonaws.com/vod/livars3-1-edit2/livars3-1-edit2.m3u8',
+        'https://flowics-pruebas.s3-us-west-2.amazonaws.com/vod/livars3-1-highlights/livars3-1-highlights.m3u8',
+      poster:
+        'https://flowics-pruebas.s3-us-west-2.amazonaws.com/vod/livars3-1-edit2/premier-league-logo-fullhd.png',
     },
   },
   live: {
