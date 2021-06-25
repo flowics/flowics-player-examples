@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Basic Flowics Graphics Overlay</title>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      #flowics-graphics {
+        width: 100vw;
+        height: 100vh;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="flowics-graphics"></div>
+
+    <script src="https://viz.flowics.com/public/scripts/graphics-overlay/0.1/sdk.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', function (event) {
+        function onGraphicsLoad(flowicsGraphicsOverlay) {
+          console.log('Flowics Overlay: onGraphicsLoad Called');
+
+          flowicsGraphicsOverlay.on('Click', (e) => console.log('clicked', e));
+          flowicsGraphicsOverlay.show();
+        }
+
+        const flowicsGraphicsOverlay = new window.Flowics.GraphicsOverlay({
+          graphicsUrl:
+            'https://viz.flowics.com/public/88e76302345390959725139ec6122a74/5d97e2b51965641b5a54d0b1/live',
+          className: `flowics-iframe`,
+          onGraphicsLoad: onGraphicsLoad,
+          domId: 'flowics-graphics',
+        });
+      });
+    </script>
+  </body>
+</html>

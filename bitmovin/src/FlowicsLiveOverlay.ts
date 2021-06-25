@@ -85,6 +85,7 @@ export class FlowicsLiveOverlay extends Container<ContainerConfig> {
 
   onGraphicsLoad(flowicsGraphicsOverlay: any) {
     console.log('Flowics Overlay: onGraphicsLoad Called');
+    flowicsGraphicsOverlay.on('Click', (e: any) => console.log('clicked', e));
     flowicsGraphicsOverlay.show();
   }
 
