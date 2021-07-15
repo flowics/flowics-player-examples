@@ -106,10 +106,6 @@ export class FlowicsVodOverlay extends Container<ContainerConfig> {
       this.flowicsGraphicsOverlay.notifyVideoEvent({ type: "TimeChanged", time: (event as TimeChangedEvent).time });
     });
 
-    flowicsGraphicsOverlay.setTexts({
-      n25: 'Buy USD 2',
-      n28: 'Buy USD 5',
-    });
     flowicsGraphicsOverlay.show();
   }
 

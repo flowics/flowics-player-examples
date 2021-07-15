@@ -27,9 +27,9 @@ var videoElement = document.getElementById('myVideoId');
 var channelAlias = 'REPLACE-WITH-YOUR-ALIAS';
 
 // Flowics Graphics
+// CHANGE TO USE YOUR GRAPHICS-OUTPUT
 var flowicsGraphicsUrl =
-  // 'https://viz.flowics.com/public/5009db71522e6617e6ef8d4d11709f8a/5ebed4fb606e442ab8aa48a7/live';
-  'https://viz.flowics.com/public/b3ece529f435dbd10da611efb8733186/5eb1bd06095eee3e40555ba1/live?profile=player';
+  'https://viz.flowics.com/public/88e76302345390959725139ec6122a74/5d97e2b51965641b5a54d0b1/live';
 
 // Authenticate against our demo backend. Not for production use.
 // See our admin api for more info how to setup your own backend
@@ -251,16 +251,11 @@ function setStatusMessage(message) {
   statusMessageElement.innerText = message;
 }
 
-// FLOWICS CONFIGS //
+// FLOWICS CONFIG //
 
 function onGraphicsLoad(flowicsGraphicsOverlay) {
   console.log('Flowics Overlay: onGraphicsLoad Called');
 
-  // Overrides some texts in the graphics
-  flowicsGraphicsOverlay.setTexts({
-    n8: 'Buy € 9.99',
-    n12: 'Buy € 19.99',
-  });
   flowicsGraphicsOverlay.show();
 }
 

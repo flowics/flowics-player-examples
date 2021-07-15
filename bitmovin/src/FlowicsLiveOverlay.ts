@@ -44,8 +44,6 @@ export class FlowicsLiveOverlay extends Container<ContainerConfig> {
       delay: 0,
       enableEventsNotifier: true,
       graphicsUrl: this.flowicsConfig.graphicsURL,
-      // graphicsURL:
-      //   "https://viz.flowics.com/public/7f1abbadc05d2db270a52cad6360327b/5ea703b94fa8ca5176941496/live",
       className: `${this.config.cssPrefix}graphicsFrame`,
       onGraphicsLoad: this.onGraphicsLoad,
     });
@@ -86,22 +84,13 @@ export class FlowicsLiveOverlay extends Container<ContainerConfig> {
   }
 
   onGraphicsLoad(flowicsGraphicsOverlay: any) {
-    // TODO LLevar esto a configuración externa no dentro de este archivo
     console.log('Flowics Overlay: onGraphicsLoad Called');
-    flowicsGraphicsOverlay.setTexts({
-      n25: 'Buy USD 2',
-      n28: 'Buy USD 5',
-    });
     flowicsGraphicsOverlay.show();
   }
 
   showOverlayIfNeeded(player: PlayerAPI) {
     if (player.isLive()) {
-      // if (player.getTimeShift() === 0) {
       this.showOverlay();
-      // } else {
-      // this.hide();
-      // }
     } else {
       this.showOverlay();
     }
