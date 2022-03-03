@@ -25,6 +25,15 @@ document.addEventListener('DOMContentLoaded', function (event) {
     },
     vod_demo:
       'https://viz.flowics.com/public/88e76302345390959725139ec6122a74/5d97e2b51965641b5a54d0b1/live',
+    vod_demo2:
+      'https://viz.flowics.com/public/25df1ca5da7f9dcff00a91d42b851225/621ffecb4f9eadb558061407/live',
+  };
+
+  const vod_tracks = {
+    vod_demo:
+      'https://gist.githubusercontent.com/fzunino/83de8afe824fdf15a2e7ef246c1ee040/raw/aa868912cb9ad549ce17f965ad5aff83f0b01ddc/vod_graphics_track_example.js',
+    vod_demo2:
+      'https://gist.githubusercontent.com/fzunino/1efd7cafa66deef7c44ec307b8900429/raw/e810505bd92cdda013aa204102bfe145b04f1efb/vod_graphics_track_example2.js',
   };
   var sources = {
     vod: {
@@ -68,10 +77,13 @@ document.addEventListener('DOMContentLoaded', function (event) {
   var container = document.getElementById('bitmovin-player');
   if (container) {
     const player = new Player(container, config);
-    const track = 'https://gist.githubusercontent.com/fzunino/83de8afe824fdf15a2e7ef246c1ee040/raw/aa868912cb9ad549ce17f965ad5aff83f0b01ddc/vod_graphics_track_example.js';
-    const uiInstance = buildFlowicsUI(player, { type: "vod", track, graphicsURL: graphics.vod_demo, delay: -1000 });
-
-
+    const track = vod_tracks.vod_demo2;
+    const uiInstance = buildFlowicsUI(player, {
+      type: 'vod',
+      track,
+      graphicsURL: graphics.vod_demo2,
+      delay: 0,
+    });
 
     player.load(sources.vod.parkour).then(
       function () {
