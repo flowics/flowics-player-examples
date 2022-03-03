@@ -42,14 +42,15 @@ document.addEventListener('DOMContentLoaded', function (event) {
         hls: '//bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8',
         progressive: [
           { url: '//bitdash-a.akamaihd.net/content/sintel/Sintel.mp4', type: 'video/mp4' },
-          { url: '//bitdash-a.akamaihd.net/content/sintel/Sintel.webm', type: 'video/webm' }
+          { url: '//bitdash-a.akamaihd.net/content/sintel/Sintel.webm', type: 'video/webm' },
         ],
         poster: '//bitdash-a.akamaihd.net/content/sintel/poster.png',
         thumbnailTrack: {
           url: '//bitdash-a.akamaihd.net/content/sintel/sprite/sprite.vtt',
         },
         title: 'Sintel',
-        description: 'A woman, Sintel, is attacked while traveling through a wintry mountainside. After defeating her attacker and taking his spear, she finds refuge in a shaman\'s hut...',
+        description:
+          "A woman, Sintel, is attacked while traveling through a wintry mountainside. After defeating her attacker and taking his spear, she finds refuge in a shaman's hut...",
         markers: [
           { time: 0, title: 'Intro' },
           { time: 102, title: 'Old Guy', duration: 30 },
@@ -61,17 +62,31 @@ document.addEventListener('DOMContentLoaded', function (event) {
           { time: 755, title: 'Credits' },
         ],
         recommendations: [
-          { title: 'Recommendation 1: The best video ever', url: 'http://bitmovin.com', thumbnail: 'http://placehold.it/300x300', duration: 10.4 },
-          { title: 'Recommendation 2: The second best video', url: 'http://bitmovin.com', thumbnail: 'http://placehold.it/300x300', duration: 64 },
-          { title: 'Recommendation 3: The third best video of all time', url: 'http://bitmovin.com', thumbnail: 'http://placehold.it/300x300', duration: 195 },
+          {
+            title: 'Recommendation 1: The best video ever',
+            url: 'http://bitmovin.com',
+            thumbnail: 'http://placehold.it/300x300',
+            duration: 10.4,
+          },
+          {
+            title: 'Recommendation 2: The second best video',
+            url: 'http://bitmovin.com',
+            thumbnail: 'http://placehold.it/300x300',
+            duration: 64,
+          },
+          {
+            title: 'Recommendation 3: The third best video of all time',
+            url: 'http://bitmovin.com',
+            thumbnail: 'http://placehold.it/300x300',
+            duration: 195,
+          },
         ],
       },
       parkour: {
-        hls:
-          'https://bitdash-a.akamaihd.net/content/MI201109210084_1/m3u8s/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.m3u8',
+        hls: 'https://bitdash-a.akamaihd.net/content/MI201109210084_1/m3u8s/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.m3u8',
         poster: 'https://bitdash-a.akamaihd.net/content/MI201109210084_1/poster.jpg',
-      }
-    }
+      },
+    },
   };
 
   var container = document.getElementById('bitmovin-player');
@@ -89,22 +104,21 @@ document.addEventListener('DOMContentLoaded', function (event) {
       function () {
         console.log('Successfully created Bitmovin Player instance');
         const enSubtitle = {
-          id: "sub1",
-          lang: "en",
-          label: "English",
-          url: "https://gist.githubusercontent.com/fzunino/d5d5fcac7ddbc375c2ab2e358c504274/raw/169e487573b0d6fa503956c97915c733d13120b7/example-subs-en.vtt",
-          kind: "subtitle"
+          id: 'sub1',
+          lang: 'en',
+          label: 'English',
+          url: 'https://gist.githubusercontent.com/fzunino/d5d5fcac7ddbc375c2ab2e358c504274/raw/169e487573b0d6fa503956c97915c733d13120b7/example-subs-en.vtt',
+          kind: 'subtitle',
         };
         const esSubtitle = {
-          id: "sub2",
-          lang: "es",
-          label: "Español",
-          url: "https://gist.githubusercontent.com/fzunino/d5d5fcac7ddbc375c2ab2e358c504274/raw/169e487573b0d6fa503956c97915c733d13120b7/example-subs-es.vtt",
-          kind: "subtitle"
+          id: 'sub2',
+          lang: 'es',
+          label: 'Español',
+          url: 'https://gist.githubusercontent.com/fzunino/d5d5fcac7ddbc375c2ab2e358c504274/raw/169e487573b0d6fa503956c97915c733d13120b7/example-subs-es.vtt',
+          kind: 'subtitle',
         };
         player.subtitles.add(enSubtitle);
         player.subtitles.add(esSubtitle);
-
       },
       function (reason) {
         console.log('Error while creating Bitmovin Player instance');
@@ -112,9 +126,7 @@ document.addEventListener('DOMContentLoaded', function (event) {
     );
 
     player.on(PlayerEvent.TimeChanged, (event) => {
-      document.getElementById('time')!.innerText =
-        (event as TimeChangedEvent).time.toString();
-      ;
+      document.getElementById('time')!.innerText = (event as TimeChangedEvent).time.toString();
     });
   }
 });
