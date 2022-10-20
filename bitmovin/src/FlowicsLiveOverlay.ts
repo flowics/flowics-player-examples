@@ -42,7 +42,6 @@ export class FlowicsLiveOverlay extends Container<ContainerConfig> {
     this.flowicsGraphicsOverlay = new window.Flowics.GraphicsOverlay({
       syncGraphics: this.flowicsConfig.syncGraphics,
       delay: 0,
-      enableEventsNotifier: true,
       graphicsUrl: this.flowicsConfig.graphicsURL,
       className: `${this.config.cssPrefix}graphicsFrame`,
       onGraphicsLoad: this.onGraphicsLoad,
