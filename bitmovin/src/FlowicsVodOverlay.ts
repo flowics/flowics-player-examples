@@ -12,10 +12,9 @@ declare global {
   }
 }
 
-
 export class FlowicsVodOverlay extends Container<ContainerConfig> {
   private graphicsConfig: VODFlowicsGraphicsConfig;
-  private flowicsGraphicsOverlay: any;
+  private flowicsGraphicsOutput: any;
   private player: PlayerAPI | null = null;
 
   private iFrameInitialized: boolean = false;
@@ -37,18 +36,17 @@ export class FlowicsVodOverlay extends Container<ContainerConfig> {
     );
   }
 
-
   configure(player: PlayerAPI, uiManager: UIInstanceManager) {
     this.player = player;
-    this.flowicsGraphicsOverlay = new window.Flowics.GraphicsOverlay({
+    this.flowicsGraphicsOutput = new window.Flowics.GraphicsOutput({
       sync: {
-        mode: window.Flowics.GraphicsOverlay.SyncMode.VideoTime,
-        track: this.graphicsConfig.track
+        mode: window.Flowics.GraphicsOutput.SyncMode.VideoTime,
+        track: this.graphicsConfig.track,
       },
       delay: this.graphicsConfig.delay ? this.graphicsConfig.delay : 0,
       graphicsUrl: this.graphicsConfig.graphicsURL,
       className: `${this.config.cssPrefix}graphicsFrame`,
-      onGraphicsLoad: this.onGraphicsLoad.bind(this)
+      onGraphicsLoad: this.onGraphicsLoad.bind(this),
     });
 
     const parseAndLogNodeMessage = (event: any) => {
@@ -64,9 +62,8 @@ export class FlowicsVodOverlay extends Container<ContainerConfig> {
     };
     const logNodeMessage = logEvent('NodeMessage');
 
-    this.flowicsGraphicsOverlay.on('NodeMessage', logNodeMessage);
-    this.flowicsGraphicsOverlay.on('NodeMessage', parseAndLogNodeMessage);
-
+    this.flowicsGraphicsOutput.on('NodeMessage', logNodeMessage);
+    this.flowicsGraphicsOutput.on('NodeMessage', parseAndLogNodeMessage);
 
     // TODO handle on video end properly.
 
@@ -93,20 +90,21 @@ export class FlowicsVodOverlay extends Container<ContainerConfig> {
     // player.on(PlayerEvent.TimeShifted, () => {
     //   this.showOverlayIfNeeded(player);
     // });
-
-
   }
 
-  onGraphicsLoad(flowicsGraphicsOverlay: any) {
+  onGraphicsLoad(flowicsGraphicsOutput: any) {
     // TODO LLevar esto a configuración externa no dentro de este archivo
-    console.log('Flowics Overlay: Graphics Initialized');
+    console.log('Flowics Output: Graphics Initialized');
 
     this.player!.on(PlayerEvent.TimeChanged, (event: PlayerEventBase) => {
       // console.log('Sending Time Changed', (event as TimeChangedEvent).time)
-      this.flowicsGraphicsOverlay.notifyVideoEvent({ type: "TimeChanged", time: (event as TimeChangedEvent).time });
+      this.flowicsGraphicsOutput.notifyVideoEvent({
+        type: 'TimeChanged',
+        time: (event as TimeChangedEvent).time,
+      });
     });
 
-    flowicsGraphicsOverlay.show();
+    flowicsGraphicsOutput.show();
   }
 
   showGraphics() {
@@ -125,11 +123,11 @@ export class FlowicsVodOverlay extends Container<ContainerConfig> {
   }
 
   buildIframe() {
-    return new DOM(this.flowicsGraphicsOverlay.getIframe());
+    return new DOM(this.flowicsGraphicsOutput.getIframe());
   }
 
   toDomElement() {
-    console.log('Flowics Overlay: toDomElement');
+    console.log('Flowics Output: toDomElement');
     const mainWrap = new DOM('div', {
       class: this.getCssClasses(),
     }).css({

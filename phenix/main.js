@@ -253,13 +253,13 @@ function setStatusMessage(message) {
 
 // FLOWICS CONFIG //
 
-function onGraphicsLoad(flowicsGraphicsOverlay) {
+function onGraphicsLoad(flowicsGraphicsOutput) {
   console.log('Flowics Overlay: onGraphicsLoad Called');
 
-  flowicsGraphicsOverlay.show();
+  flowicsGraphicsOutput.show();
 }
 
-var flowicsGraphicsOverlay = new Flowics.GraphicsOverlay({
+var flowicsGraphicsOutput = new Flowics.GraphicsOutput({
   syncGraphics: false,
   delay: 0,
   graphicsUrl: flowicsGraphicsUrl,
@@ -316,12 +316,12 @@ const logEvent = (eventType) => (event) => {
 };
 const logNodeMessage = logEvent('NodeMessage');
 
-flowicsGraphicsOverlay.on('NodeMessage', logNodeMessage);
-flowicsGraphicsOverlay.on('NodeMessage', parseAndLogNodeMessage);
+flowicsGraphicsOutput.on('NodeMessage', logNodeMessage);
+flowicsGraphicsOutput.on('NodeMessage', parseAndLogNodeMessage);
 /* To deregister the listener the `off` method can be used
  *
- * flowicsGraphicsOverlay.off('NodeMessage', logNodeMessage);
- * flowicsGraphicsOverlay.off('NodeMessage', parseAndLogNodeMessage);
+ * flowicsGraphicsOutput.off('NodeMessage', logNodeMessage);
+ * flowicsGraphicsOutput.off('NodeMessage', parseAndLogNodeMessage);
  */
 
 const player = document.querySelector('#customPlayer');
@@ -373,12 +373,12 @@ document.addEventListener('fullscreenchange', exitFullscreenHandler);
 
 pauseButton.addEventListener('click', (ev) => {
   videoElement.pause();
-  flowicsGraphicsOverlay.hide();
+  flowicsGraphicsOutput.hide();
 });
 
 playButton.addEventListener('click', (ev) => {
   videoElement.play();
-  flowicsGraphicsOverlay.show();
+  flowicsGraphicsOutput.show();
 });
 
 // END FLOWICS //

@@ -15,7 +15,7 @@ declare global {
 export class FlowicsLiveOverlay extends Container<ContainerConfig> {
   private flowicsConfig: LiveFlowicsGraphicsConfig;
 
-  private flowicsGraphicsOverlay: any;
+  private flowicsGraphicsOutput: any;
 
   private eventHandler: any;
 
@@ -39,7 +39,7 @@ export class FlowicsLiveOverlay extends Container<ContainerConfig> {
   }
 
   configure(player: PlayerAPI, uiManager: UIInstanceManager) {
-    this.flowicsGraphicsOverlay = new window.Flowics.GraphicsOverlay({
+    this.flowicsGraphicsOutput = new window.Flowics.GraphicsOutput({
       syncGraphics: this.flowicsConfig.syncGraphics,
       delay: 0,
       graphicsUrl: this.flowicsConfig.graphicsURL,
@@ -78,14 +78,14 @@ export class FlowicsLiveOverlay extends Container<ContainerConfig> {
     });
 
     player.on(PlayerEvent.TimeChanged, (event: PlayerEventBase) => {
-      this.flowicsGraphicsOverlay.notifyVideoSegment((event as TimeChangedEvent).time);
+      this.flowicsGraphicsOutput.notifyVideoSegment((event as TimeChangedEvent).time);
     });
   }
 
-  onGraphicsLoad(flowicsGraphicsOverlay: any) {
-    console.log('Flowics Overlay: onGraphicsLoad Called');
-    flowicsGraphicsOverlay.on('Click', (e: any) => console.log('clicked', e));
-    flowicsGraphicsOverlay.show();
+  onGraphicsLoad(flowicsGraphicsOutput: any) {
+    console.log('Flowics Output: onGraphicsLoad Called');
+    flowicsGraphicsOutput.on('Click', (e: any) => console.log('clicked', e));
+    flowicsGraphicsOutput.show();
   }
 
   showOverlayIfNeeded(player: PlayerAPI) {
@@ -112,11 +112,11 @@ export class FlowicsLiveOverlay extends Container<ContainerConfig> {
   }
 
   buildIframe() {
-    return new DOM(this.flowicsGraphicsOverlay.getIframe());
+    return new DOM(this.flowicsGraphicsOutput.getIframe());
   }
 
   toDomElement() {
-    console.log('Flowics Overlay: toDomElement');
+    console.log('Flowics Output: toDomElement');
     const mainWrap = new DOM('div', {
       class: this.getCssClasses(),
     }).css({
