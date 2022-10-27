@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Graphics Output overlays handling</title>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      #flowics-graphics {
+        width: 90vw;
+        height: 90vh;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>Graphics Output overlays handling</h2>
+    <div id="flowics-graphics"></div>
+
+    <script src="https://viz.flowics.com/public/scripts/graphics-output/0.1/sdk.js"></script>
+    <script>
+      const sleep = ms => new Promise(r => setTimeout(r, ms));
+
+      document.addEventListener('DOMContentLoaded', function (event) {
+        const graphicsOutput = new Flowics.GraphicsOutput({
+          graphicsUrl:
+            'https://viz.flowics.com/public/f70055f1b1266d9adc0a05648c6a10df/61534fa9b729264a85f15220/live',
+          domId: 'flowics-graphics',
+          sync: { mode: Flowics.GraphicsOutput.SyncMode.Detached },
+          autoload: false
+        });
+        
+        graphicsOutput.on('Load', async () => {
+          console.log('Graphics Output Loaded');
+
+          const overlays = await graphicsOutput.getOverlays();
+          console.log('overlays', overlays)
+
+          await graphicsOutput.takeAllOut();
+          graphicsOutput.show();
+          
+          console.log('Transitioning overlays');
+          await sleep(1000);
+          await graphicsOutput.updateOverlays([{id: 'n18', state: 'in'}]);
+          await sleep(3000);
+          graphicsOutput.updateOverlays([{id: 'n272', state: 'in'}, {id: 'n127', state: 'in'}, {id: 'n204', state: 'in'}]);
+          await sleep(3000);
+          graphicsOutput.updateOverlays([{id: 'n220', state: 'in'}]);
+          await sleep(3000);
+          graphicsOutput.updateOverlays([{id: 'n296', state: 'out'}]);
+          await sleep(3000);
+          graphicsOutput.updateOverlays([{id: 'n310', state: 'in'}]);
+        });
+
+        graphicsOutput.load();
+      });
+    </script>
+  </body>
+</html>
