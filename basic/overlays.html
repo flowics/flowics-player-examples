@@ -18,7 +18,7 @@
 
     <script src="https://viz.flowics.com/public/scripts/graphics-output/0.1/sdk.js"></script>
     <script>
-      const sleep = ms => new Promise(r => setTimeout(r, ms));
+      const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
       document.addEventListener('DOMContentLoaded', function (event) {
         const graphicsOutput = new Flowics.GraphicsOutput({
@@ -26,29 +26,44 @@
             'https://viz.flowics.com/public/f70055f1b1266d9adc0a05648c6a10df/61534fa9b729264a85f15220/live',
           domId: 'flowics-graphics',
           sync: { mode: Flowics.GraphicsOutput.SyncMode.Detached },
-          autoload: false
+          autoload: false,
         });
-        
+
         graphicsOutput.on('Load', async () => {
           console.log('Graphics Output Loaded');
 
           const overlays = await graphicsOutput.getOverlays();
-          console.log('overlays', overlays)
+          console.log('overlays', overlays);
 
           await graphicsOutput.takeAllOut();
           graphicsOutput.show();
-          
+
           console.log('Transitioning overlays');
           await sleep(1000);
-          await graphicsOutput.updateOverlays([{id: 'n18', state: 'in'}]);
+          await graphicsOutput.updateOverlays([{ id: 'n18', state: 'in' }]);
           await sleep(3000);
-          graphicsOutput.updateOverlays([{id: 'n272', state: 'in'}, {id: 'n127', state: 'in'}, {id: 'n204', state: 'in'}]);
+          graphicsOutput.updateOverlays([
+            { id: 'n272', state: 'in' },
+            { id: 'n127', state: 'in' },
+            { id: 'n204', state: 'in' },
+          ]);
           await sleep(3000);
-          graphicsOutput.updateOverlays([{id: 'n220', state: 'in'}]);
+          graphicsOutput.updateOverlays([{ id: 'n220', state: 'in' }]);
           await sleep(3000);
-          graphicsOutput.updateOverlays([{id: 'n296', state: 'out'}]);
+          graphicsOutput.updateOverlays([{ id: 'n296', state: 'out' }]);
           await sleep(3000);
-          graphicsOutput.updateOverlays([{id: 'n310', state: 'in'}]);
+          graphicsOutput.updateOverlays([{ id: 'n310', state: 'in' }]);
+
+          // Change city
+          await sleep(3000);
+          graphicsOutput.updateOverlays([
+            { id: 'n18', controls: { txtCity: { value: 'New York' } } },
+          ]);
+
+          await sleep(3000);
+          graphicsOutput.updateOverlays([
+            { id: 'n39', state: 'in', controls: { txtCity: { value: 'Paris' } } },
+          ]);
         });
 
         graphicsOutput.load();
